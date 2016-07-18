@@ -23,9 +23,9 @@ class GalleryViewModel {
     }
     
     //MARK: Fetch Recent Images from Flickr
-    func fetchRecentImagesFromFlickr(completionHandler: (images: [NSDictionary]?, error: NSError?) -> ()) {
+    func fetchRecentImagesFromFlickr(completionHandler: (images: [FlickrPhoto]?, error: NSError?) -> ()) {
         
-        var images = [NSDictionary]()
+        var images = [FlickrPhoto]()
         
         let urlString = "\(FlickrAPI.RecentBaseUrl)&per_page=\(FlickrAPI.ImagesPerPage)&page=\(1)&tags=&format=json&nojsoncallback=1&extras=owner_name,date_upload,tags,views"
         print(urlString)
@@ -45,7 +45,8 @@ class GalleryViewModel {
                         if let photos = photosList["photo"] as? NSArray {
                             for photo in photos {
                                 if photo is NSDictionary {
-                                    images.append(photo as! NSDictionary)
+                                    let flickrPhoto = FlickrPhoto(withFlickrPhoto: photo as! NSDictionary)
+                                    images.append(flickrPhoto)
                                 }
                             }
                             completionHandler(images: images, error: nil)
