@@ -29,6 +29,7 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate {
         tv.estimatedRowHeight = MainScreen.Size.width
         tv.separatorStyle = .none
         tv.register(FlickrPhotoTableViewCell.self, forCellReuseIdentifier: "flickrPhotoTableViewCell")
+        tv.register(FlickrPhotoDataCell.self, forCellReuseIdentifier: "flickrPhotoDataCell")
         return tv
     }()
     
@@ -76,12 +77,20 @@ extension GalleryViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "flickrPhotoTableViewCell") as! FlickrPhotoTableViewCell
-        cell.flickrPhoto = flickrPhotos?[indexPath.section]
-        return cell
+        let flickrPhoto = flickrPhotos?[indexPath.section]
+        if indexPath.row == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "flickrPhotoTableViewCell") as! FlickrPhotoTableViewCell
+            cell.flickrPhoto = flickrPhoto
+            return cell
+            
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "flickrPhotoDataCell") as! FlickrPhotoDataCell
+            cell.flickrPhoto = flickrPhoto
+            return cell
+        }
     }
 }

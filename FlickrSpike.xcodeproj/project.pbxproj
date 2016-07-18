@@ -22,6 +22,7 @@
 		CEC198B81D3CA81800BF7F5F /* FlickrPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC198B71D3CA81800BF7F5F /* FlickrPhoto.swift */; };
 		CEC198BB1D3CABD100BF7F5F /* FlickrPhotoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC198BA1D3CABD100BF7F5F /* FlickrPhotoTableViewCell.swift */; };
 		CEC198BD1D3CAEFF00BF7F5F /* FlickrPhotoTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC198BC1D3CAEFF00BF7F5F /* FlickrPhotoTableHeaderView.swift */; };
+		CEC198BF1D3CB1CF00BF7F5F /* FlickrPhotoDataCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC198BE1D3CB1CF00BF7F5F /* FlickrPhotoDataCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		CEC198B71D3CA81800BF7F5F /* FlickrPhoto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickrPhoto.swift; sourceTree = "<group>"; };
 		CEC198BA1D3CABD100BF7F5F /* FlickrPhotoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickrPhotoTableViewCell.swift; sourceTree = "<group>"; };
 		CEC198BC1D3CAEFF00BF7F5F /* FlickrPhotoTableHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickrPhotoTableHeaderView.swift; sourceTree = "<group>"; };
+		CEC198BE1D3CB1CF00BF7F5F /* FlickrPhotoDataCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickrPhotoDataCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,8 +177,9 @@
 				CEC198AB1D3CA2FA00BF7F5F /* BaseView.swift */,
 				CEC198AC1D3CA2FA00BF7F5F /* BaseTableCell.swift */,
 				CEC198AD1D3CA2FA00BF7F5F /* BaseCollectionCell.swift */,
-				CEC198BA1D3CABD100BF7F5F /* FlickrPhotoTableViewCell.swift */,
 				CEC198BC1D3CAEFF00BF7F5F /* FlickrPhotoTableHeaderView.swift */,
+				CEC198BA1D3CABD100BF7F5F /* FlickrPhotoTableViewCell.swift */,
+				CEC198BE1D3CB1CF00BF7F5F /* FlickrPhotoDataCell.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -339,6 +342,7 @@
 				CE09CDF01D3B72AE00B04E5B /* AppDelegate.swift in Sources */,
 				CEC198B31D3CA3AD00BF7F5F /* GalleryViewController.swift in Sources */,
 				CE09CE581D3B79DA00B04E5B /* Constants.swift in Sources */,
+				CEC198BF1D3CB1CF00BF7F5F /* FlickrPhotoDataCell.swift in Sources */,
 				CEC198BB1D3CABD100BF7F5F /* FlickrPhotoTableViewCell.swift in Sources */,
 				CEC198AF1D3CA2FA00BF7F5F /* BaseTableCell.swift in Sources */,
 				CEC198B81D3CA81800BF7F5F /* FlickrPhoto.swift in Sources */,
