@@ -17,7 +17,7 @@ class FlickrPhotoCollectionViewCell: BaseCollectionCell {
     //----------------------------------------------------------------------------------------
     var flickrPhoto: FlickrPhoto? {
         didSet {
-            if let urlString = flickrPhoto?.thumbUrl {
+            if let urlString = flickrPhoto?.imageUrl {
                 photoView.loadImageUsingCache(withUrlString: urlString, completionHandler: nil)
             }
         }

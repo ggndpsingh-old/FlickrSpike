@@ -110,7 +110,13 @@ public class FlickrPhotoCollectionView: UICollectionView, UICollectionViewDelega
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        splitView.collectionViewDidSelectItem(at: indexPath.item!)        
+//        splitView.collectionViewDidSelectItem(at: indexPath.item!)
+        let rect = collectionView.layoutAttributesForItem(at: indexPath)?.frame
+        let view = ErrorMessageView()
+        
+        if let flickrPhoto = flickrPhotos?[indexPath.item!] {
+                view.show(flickrPhoto: flickrPhoto, withIntialRect: rect!)
+        }
     }
     
     
