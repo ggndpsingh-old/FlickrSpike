@@ -69,7 +69,7 @@ class GalleryViewModel {
         
         let tags = string.components(separatedBy: .whitespaces).joined(separator: ",").lowercased()
         
-        let urlString = "\(FlickrAPI.SearchBaseUrl)&per_page=\(FlickrAPI.ImagesPerPage)&page=\(page)&tags=\(tags)&format=json&nojsoncallback=1&extras=owner_name,date_upload,tags,views"
+        let urlString = "\(FlickrAPI.SearchBaseUrl)&per_page=\(FlickrAPI.ImagesPerPage)&page=\(page)&tags=\(tags)&tag_mode=all&format=json&nojsoncallback=1&extras=owner_name,date_upload,tags,views"
         print(urlString)
         
         let request = URLRequest(url: URL(string: urlString)!)

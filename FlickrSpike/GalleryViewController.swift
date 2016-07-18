@@ -46,6 +46,11 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate {
         return bar
     }()
     
+    let detailsLabel: UILabel = {
+        let label = UILabel(frame: CGRect.zero)
+        return label
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -141,9 +146,12 @@ extension GalleryViewController: UISearchBarDelegate {
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        isSearching = false
         searchBar.text = ""
         searchBar.endEditing(true)
         searchBar.setShowsCancelButton(false, animated: true)
+        flickrPhotos = nil
+        fetchRecentPhotosFromFlickr()
     }
     
     func handleSearch() {
