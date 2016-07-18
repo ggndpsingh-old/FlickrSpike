@@ -109,6 +109,7 @@ public class FlickrPhotoTableView: UITableView, UITableViewDataSource, UITableVi
         
         if indexPath.row == 0 {
             let cell = dequeueReusableCell(withIdentifier: "flickrPhotoTableViewCell") as! FlickrPhotoTableViewCell
+            cell.tableView = self
             cell.flickrPhoto = flickrPhotos![indexPath.section]
             
             return cell
@@ -137,8 +138,8 @@ public class FlickrPhotoTableView: UITableView, UITableViewDataSource, UITableVi
     //MARK:
     //MARK: Custom Methods
     //----------------------------------------------------------------------------------------
-    func showImagesOptions(forFlickrPhoto flickrPhoto: FlickrPhoto, andImage: UIImage) {
-        
+    func showImagesOptions(forFlickrPhoto flickrPhoto: FlickrPhoto, andImage image: UIImage) {
+        splitView.showOptionsForFlickrPhoto(flickrPhoto: flickrPhoto, withImageFile: image)
     }
     
     func scrollToItemSelectedInCollectionView(at index: Int) {

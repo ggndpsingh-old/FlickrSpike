@@ -32,12 +32,13 @@ extension Date {
 let imageCache = Cache<AnyObject, UIImage>()
 extension UIImageView {
     
-    func loadImageUsingCache(withUrlString string: String) {
+    func loadImageUsingCache(withUrlString string: String, completionHandler: ((completed: Bool) ->())? ) {
         
         self.image = nil
         
         if let cachedImage = imageCache.object(forKey: string) {
             self.image = cachedImage
+            completionHandler?(completed: true)
             return
         }
         
@@ -53,6 +54,7 @@ extension UIImageView {
                 imageCache.setObject(image!, forKey: string)
                 
                 self.image = image
+                completionHandler?(completed: true)
             }
             
         }).resume()

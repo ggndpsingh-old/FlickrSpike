@@ -31,6 +31,8 @@
 		CEFB04561D3CD09B00A1779D /* FlickrPhotoCollectionContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFB04551D3CD09B00A1779D /* FlickrPhotoCollectionContainerCell.swift */; };
 		CEFB04581D3CD96C00A1779D /* MenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFB04571D3CD96C00A1779D /* MenuBar.swift */; };
 		CEFB045A1D3CDA0200A1779D /* MenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFB04591D3CDA0200A1779D /* MenuCell.swift */; };
+		CEFB04611D3D0C8600A1779D /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEFB04601D3D0C8600A1779D /* MessageUI.framework */; };
+		CEFB04631D3D0D1800A1779D /* Messages.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEFB04621D3D0D1800A1779D /* Messages.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +83,8 @@
 		CEFB04551D3CD09B00A1779D /* FlickrPhotoCollectionContainerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickrPhotoCollectionContainerCell.swift; sourceTree = "<group>"; };
 		CEFB04571D3CD96C00A1779D /* MenuBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuBar.swift; sourceTree = "<group>"; };
 		CEFB04591D3CDA0200A1779D /* MenuCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuCell.swift; sourceTree = "<group>"; };
+		CEFB04601D3D0C8600A1779D /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		CEFB04621D3D0D1800A1779D /* Messages.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Messages.framework; path = System/Library/Frameworks/Messages.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +92,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEFB04631D3D0D1800A1779D /* Messages.framework in Frameworks */,
+				CEFB04611D3D0C8600A1779D /* MessageUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,6 +121,7 @@
 				CE09CE031D3B72AE00B04E5B /* FlickrSpikeTests */,
 				CE09CE0E1D3B72AE00B04E5B /* FlickrSpikeUITests */,
 				CE09CDED1D3B72AE00B04E5B /* Products */,
+				CEFB045F1D3D0C8600A1779D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -230,6 +237,15 @@
 				CEC198AD1D3CA2FA00BF7F5F /* BaseCollectionCell.swift */,
 			);
 			name = "Base Views";
+			sourceTree = "<group>";
+		};
+		CEFB045F1D3D0C8600A1779D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CEFB04621D3D0D1800A1779D /* Messages.framework */,
+				CEFB04601D3D0C8600A1779D /* MessageUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

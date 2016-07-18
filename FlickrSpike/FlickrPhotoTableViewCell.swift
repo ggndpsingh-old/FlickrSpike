@@ -10,12 +10,23 @@ import UIKit
 
 class FlickrPhotoTableViewCell: BaseTableCell {
     
+    var tableView: FlickrPhotoTableView?
+    
+    
+    lazy var longTap: UILongPressGestureRecognizer = {
+        let lt = UILongPressGestureRecognizer()
+        lt.addTarget(self, action: #selector(showImageOptions))
+        return lt
+    }()
+    
     
     //MARK: Data
     var flickrPhoto: FlickrPhoto? {
         didSet {
-            if let urlString = flickrPhoto?.thumbUrl {
-                photoView.loadImageUsingCache(withUrlString: urlString)
+            if let urlString = flickrPhoto?.imageUrl {
+                photoView.loadImageUsingCache(withUrlString: urlString) { completed in
+                    self.photoView.addGestureRecognizer(self.longTap)
+                }
             }
         }
     }
@@ -26,6 +37,7 @@ class FlickrPhotoTableViewCell: BaseTableCell {
         pv.translatesAutoresizingMaskIntoConstraints = false
         pv.contentMode = .scaleAspectFill
         pv.clipsToBounds = true
+        pv.isUserInteractionEnabled = true
         return pv
     }()
     
@@ -39,5 +51,12 @@ class FlickrPhotoTableViewCell: BaseTableCell {
         photoView.topAnchor.constraint      (equalTo: topAnchor)            .isActive = true
         photoView.bottomAnchor.constraint   (equalTo: bottomAnchor)         .isActive = true
         photoView.heightAnchor.constraint   (equalTo: photoView.widthAnchor).isActive = true
+        
+        
     }
+    
+    func showImageOptions() {
+        tableView?.showImagesOptions(forFlickrPhoto: flickrPhoto!, andImage: photoView.image!)
+    }
+    
 }

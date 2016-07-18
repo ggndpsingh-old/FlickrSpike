@@ -7,13 +7,24 @@
 //
 
 import UIKit
+import MessageUI
 
-class GalleryViewController: UIViewController, GalleryViewModelDelegate {
+class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate {
 
     //MARK: Data
     var flickrPhotos: [FlickrPhoto]? {
         didSet {
             flickrPhotoSplitView.reloadData()
+            
+            if let count = flickrPhotos?.count {
+                
+                if isSearching {
+                    detailsLabel.text = "Showing \(count) Photos for \(searchString)"
+                } else {
+                    detailsLabel.text = "Showing \(count) Recent Photos"
+                }
+            }
+            
         }
     }
     
@@ -48,6 +59,13 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate {
     
     let detailsLabel: UILabel = {
         let label = UILabel(frame: CGRect.zero)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.backgroundColor = .navBar()
+        label.textColor = .white()
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.adjustsFontSizeToFitWidth = true
+        label.text = "Showing Everything"
         return label
     }()
     
@@ -72,10 +90,16 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate {
     
     func setupViews() {
         
+        view.addSubview(detailsLabel)
+        detailsLabel.leftAnchor.constraint     (equalTo: view.leftAnchor)  .isActive = true
+        detailsLabel.rightAnchor.constraint    (equalTo: view.rightAnchor) .isActive = true
+        detailsLabel.topAnchor.constraint      (equalTo: view.topAnchor)   .isActive = true
+        detailsLabel.heightAnchor.constraint   (equalToConstant: 20)       .isActive = true
+        
         view.addSubview(flickrPhotoSplitView)
         flickrPhotoSplitView.leftAnchor.constraint     (equalTo: view.leftAnchor)  .isActive = true
         flickrPhotoSplitView.rightAnchor.constraint    (equalTo: view.rightAnchor) .isActive = true
-        flickrPhotoSplitView.topAnchor.constraint      (equalTo: view.topAnchor)   .isActive = true
+        flickrPhotoSplitView.topAnchor.constraint      (equalTo: detailsLabel.bottomAnchor)   .isActive = true
         flickrPhotoSplitView.bottomAnchor.constraint   (equalTo: view.bottomAnchor).isActive = true
     }
     
@@ -115,6 +139,55 @@ extension GalleryViewController: FlickrPhotoSplitViewDelegate, FlickrPhotoSplitV
         pagesLoaded = 0
         fetchRecentPhotosFromFlickr()
     }
+    
+    func showOptionsForFlickrPhoto(flickrPhoto: FlickrPhoto, withImageFile image: UIImage) {
+        
+        let actionSheet = UIAlertController(title: "Photo Options", message: nil, preferredStyle: .actionSheet)
+        
+        let saveAction = UIAlertAction(title: "Save Photo", style: .default) { _ in
+            UIImageWriteToSavedPhotosAlbum(image, self, #selector(self.image(image:didFinishSavingWithError:contextInfo:)), nil)
+        }
+        
+        let openInSafariAction = UIAlertAction(title: "Open in Safari", style: .default) { _ in
+            if let url = flickrPhoto.flickrUrl {
+                UIApplication.shared().open(URL(string: url)!, options: [:], completionHandler: nil)
+            }
+        }
+        
+        let sendEmailAction = UIAlertAction(title: "Share by Email", style: .default) { _ in
+            
+            let mailComposeVC = MFMailComposeViewController()
+            mailComposeVC.mailComposeDelegate = self
+            mailComposeVC.addAttachmentData(UIImageJPEGRepresentation(image, 1)!, mimeType: "image/jpeg", fileName: "\(flickrPhoto.id!).jpeg")
+            mailComposeVC.setSubject("Flickr Photo: \(flickrPhoto.title)")
+            
+            self.present(mailComposeVC, animated: true, completion: nil)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        actionSheet.addAction(saveAction)
+        actionSheet.addAction(openInSafariAction)
+        if MFMailComposeViewController.canSendMail() {
+            actionSheet.addAction(sendEmailAction)
+        }
+        actionSheet.addAction(cancelAction)
+        
+        present(actionSheet, animated: true, completion: nil)
+    }
+    
+    func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Void>) {
+        if error == nil {
+            print("Success")
+        } else {
+            print("Failure")
+        }
+    }
+    
+    @objc(mailComposeController:didFinishWithResult:error:) func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: NSError?) {
+        dismiss(animated: true, completion: nil)
+        
+    }
 }
 
 extension GalleryViewController: UISearchBarDelegate {
@@ -146,12 +219,16 @@ extension GalleryViewController: UISearchBarDelegate {
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        
         isSearching = false
-        searchBar.text = ""
         searchBar.endEditing(true)
         searchBar.setShowsCancelButton(false, animated: true)
-        flickrPhotos = nil
-        fetchRecentPhotosFromFlickr()
+        
+        if searchBar.text != "" {
+            searchBar.text = ""
+            flickrPhotos = nil
+            fetchRecentPhotosFromFlickr()
+        }
     }
     
     func handleSearch() {

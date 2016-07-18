@@ -17,6 +17,8 @@ public protocol FlickrPhotoSplitViewDelegate: class {
     
     func flickrPhotoSplitView(willDisplayLastItemFromflickrPhotos flickrPhotos: [FlickrPhoto]?)
     func resetflickrPhotos(in flickrPhotoSplitView: FlickrPhotoSplitView)
+    func showOptionsForFlickrPhoto(flickrPhoto: FlickrPhoto, withImageFile image: UIImage)
+    
 }
 
 
@@ -113,7 +115,7 @@ public class FlickrPhotoSplitView: BaseView {
     
     
     //----------------------------------------------------------------------------------------
-    //MARK:- Reload Data
+    //MARK:- Table & Collection View Helper Methods
     //----------------------------------------------------------------------------------------
     func reset() {
         self.flickrPhotos = nil
@@ -139,6 +141,10 @@ public class FlickrPhotoSplitView: BaseView {
     func collectionViewDidSelectItem(at index: Int) {
         tableView?.scrollToItemSelectedInCollectionView(at: index)
         splitView.scrollToItem(at: IndexPath(item: 0, section: 0), at: [], animated: true)
+    }
+    
+    func showOptionsForFlickrPhoto(flickrPhoto: FlickrPhoto, withImageFile image: UIImage) {
+        delegate.showOptionsForFlickrPhoto(flickrPhoto: flickrPhoto, withImageFile: image)
     }
     
     
