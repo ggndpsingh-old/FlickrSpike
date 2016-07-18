@@ -36,6 +36,9 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate {
         fetchRecentPhotosFromFlickr()
         edgesForExtendedLayout = []
         
+        navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.barTintColor = .navBar()
+        
         setupViews()
     }
     

@@ -67,6 +67,10 @@ extension UIColor {
         return UIColor(red: 40/255, green: 40/255, blue: 40/255, alpha: 1)
     }
     
+    class func menuBarTint() -> UIColor {
+        return UIColor(red: 225/255,  green: 65/255, blue: 60/255,  alpha: 1)
+    }
+    
     class func buttonBlue() -> UIColor {
         return UIColor(red: 42/255,  green: 163/255, blue: 239/255,  alpha: 1)
     }

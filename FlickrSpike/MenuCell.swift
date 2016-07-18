@@ -14,19 +14,19 @@ class MenuCell: BaseCollectionCell {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.image = UIImage(named: "icon-feed")?.withRenderingMode(.alwaysTemplate)
-        iv.tintColor = UIColor.darkGray()
+        iv.tintColor = UIColor.lightGray()
         return iv
     }()
     
     override var isHighlighted: Bool {
         didSet {
-            imageView.tintColor = isHighlighted ? .white() : .darkGray()
+            imageView.tintColor = isHighlighted ? .menuBarTint() : .lightGray()
         }
     }
     
     override var isSelected: Bool {
         didSet {
-            imageView.tintColor = isSelected ? .white() : .darkGray()
+            imageView.tintColor = isSelected ? .menuBarTint() : .lightGray()
         }
     }
     

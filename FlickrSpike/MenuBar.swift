@@ -75,7 +75,7 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
     //--------------------------------------------------------------------------------
     func setupHorizontalBar() {
         let horizontalBarView = UIView()
-        horizontalBarView.backgroundColor = UIColor(white: 1, alpha: 0.9)
+        horizontalBarView.backgroundColor = UIColor.menuBarTint().withAlphaComponent(0.8)
         horizontalBarView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(horizontalBarView)
         

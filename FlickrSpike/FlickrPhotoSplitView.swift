@@ -69,7 +69,6 @@ public class FlickrPhotoSplitView: BaseView {
         cv.bounces = false
         cv.isPagingEnabled = true
         cv.showsHorizontalScrollIndicator = false
-        cv.backgroundColor = UIColor.white()
         return cv
     }()
     
@@ -94,6 +93,7 @@ public class FlickrPhotoSplitView: BaseView {
     //MARK:- Setup Views
     //----------------------------------------------------------------------------------------
     override func setupViews() {
+        
         
         splitView.register(FlickrPhotoTableContainerCell.self, forCellWithReuseIdentifier: "flickrPhotoTableContainerCell")
         splitView.register(FlickrPhotoCollectionContainerCell.self, forCellWithReuseIdentifier: "flickrPhotoCollectionContainerCell")
