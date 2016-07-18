@@ -15,7 +15,9 @@ class FlickrPhotoCollectionViewCell: BaseCollectionCell {
     var flickrPhoto: FlickrPhoto? {
         didSet {
             if let urlString = flickrPhoto?.imageUrl {
-                photoView.loadImageUsingCache(withUrlString: urlString)
+                if photoView.image == nil {
+                    photoView.loadImageUsingCache(withUrlString: urlString)
+                }
             }
         }
     }
@@ -30,6 +32,8 @@ class FlickrPhotoCollectionViewCell: BaseCollectionCell {
     }()
     
     override func setupViews() {
+        
+        photoView.removeFromSuperview()
         
         addSubview(photoView)
         photoView.topAnchor.constraint      (equalTo: topAnchor)    .isActive = true

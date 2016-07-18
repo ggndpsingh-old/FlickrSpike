@@ -20,6 +20,7 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate {
     
     //MARK: Variables
     var viewModel: GalleryViewModel!
+    var pagesLoaded = 0
     
     lazy var tableView: UITableView = {
         var tv = UITableView(frame: CGRect.zero)
@@ -69,11 +70,19 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate {
     }
     
     func fetchRecentPhotosFromFlickr() {
-        viewModel.fetchRecentImagesFromFlickr { (loadedPhotos, error) in
+        viewModel.fetchRecentImagesFromFlickr(atPage: pagesLoaded) { (loadedPhotos, error) in
             DispatchQueue.main.async {
-                self.flickrPhotos = loadedPhotos
+                
+                //If there are alredy photos loaded, add new photos to current photos
+                if let current = self.flickrPhotos, loaded = loadedPhotos {
+                    self.flickrPhotos = current + loaded
+                    
+                } else { //Set loaded photo
+                    self.flickrPhotos = loadedPhotos
+                }
             }
         }
+        pagesLoaded += 1
     }
 }
 
@@ -144,4 +153,11 @@ extension GalleryViewController: UICollectionViewDelegate, UICollectionViewDataS
         return 1
     }
     
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let item = indexPath.item, count = flickrPhotos?.count {
+            if item == count - 1 {
+                fetchRecentPhotosFromFlickr()
+            }
+        }
+    }
 }
