@@ -190,9 +190,7 @@
 		CEC198B11D3CA2FE00BF7F5F /* View */ = {
 			isa = PBXGroup;
 			children = (
-				CEC198AB1D3CA2FA00BF7F5F /* BaseView.swift */,
-				CEC198AC1D3CA2FA00BF7F5F /* BaseTableCell.swift */,
-				CEC198AD1D3CA2FA00BF7F5F /* BaseCollectionCell.swift */,
+				CEFB045B1D3CE52000A1779D /* Base Views */,
 				CEC198C21D3CCB9900BF7F5F /* FlickrPhotoSplitView.swift */,
 				CEC198BC1D3CAEFF00BF7F5F /* FlickrPhotoTableHeaderView.swift */,
 				CEFB04511D3CCE7A00A1779D /* FlickrPhotoTableView.swift */,
@@ -222,6 +220,16 @@
 				CEC198B71D3CA81800BF7F5F /* FlickrPhoto.swift */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		CEFB045B1D3CE52000A1779D /* Base Views */ = {
+			isa = PBXGroup;
+			children = (
+				CEC198AB1D3CA2FA00BF7F5F /* BaseView.swift */,
+				CEC198AC1D3CA2FA00BF7F5F /* BaseTableCell.swift */,
+				CEC198AD1D3CA2FA00BF7F5F /* BaseCollectionCell.swift */,
+			);
+			name = "Base Views";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
