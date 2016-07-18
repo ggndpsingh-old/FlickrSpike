@@ -142,7 +142,7 @@ public class FlickrPhotoTableView: UITableView, UITableViewDataSource, UITableVi
     }
     
     func scrollToItemSelectedInCollectionView(at index: Int) {
-        let delayTime = DispatchTime.now() + 0.3
+        let delayTime = DispatchTime.now() + 0.1
         DispatchQueue.main.after(when: delayTime) {
             
             let indexPath = IndexPath(row: 0, section: index)

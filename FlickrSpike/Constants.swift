@@ -14,7 +14,7 @@ struct FlickrAPI {
     static let Key              = "df0351148fbb8b07bcbe35fb49899313"
     static let Secret           = "f5663bb7cd86f419"
     
-    static let ImagesPerPage    = 40
+    static let ImagesPerPage    = 50
     
     static let SearchBaseUrl    = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=\(FlickrAPI.Key)"
     static let RecentBaseUrl    = "https://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=\(FlickrAPI.Key)"

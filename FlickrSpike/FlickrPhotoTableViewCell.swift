@@ -14,7 +14,7 @@ class FlickrPhotoTableViewCell: BaseTableCell {
     //MARK: Data
     var flickrPhoto: FlickrPhoto? {
         didSet {
-            if let urlString = flickrPhoto?.imageUrl {
+            if let urlString = flickrPhoto?.thumbUrl {
                 photoView.loadImageUsingCache(withUrlString: urlString)
             }
         }

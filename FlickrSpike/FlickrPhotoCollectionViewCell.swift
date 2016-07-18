@@ -15,9 +15,7 @@ class FlickrPhotoCollectionViewCell: BaseCollectionCell {
     var flickrPhoto: FlickrPhoto? {
         didSet {
             if let urlString = flickrPhoto?.imageUrl {
-                if photoView.image == nil {
-                    photoView.loadImageUsingCache(withUrlString: urlString)
-                }
+                photoView.loadImageUsingCache(withUrlString: urlString)
             }
         }
     }
@@ -33,14 +31,18 @@ class FlickrPhotoCollectionViewCell: BaseCollectionCell {
     
     override func setupViews() {
         
-        photoView.removeFromSuperview()
-        
         addSubview(photoView)
         photoView.topAnchor.constraint      (equalTo: topAnchor)    .isActive = true
         photoView.bottomAnchor.constraint   (equalTo: bottomAnchor) .isActive = true
         photoView.leftAnchor.constraint     (equalTo: leftAnchor)   .isActive = true
         photoView.rightAnchor.constraint    (equalTo: rightAnchor)  .isActive = true
         
+    }
+    
+    override func prepareForReuse() {
+        
+        photoView.image = nil
+        super.prepareForReuse()
     }
     
 }

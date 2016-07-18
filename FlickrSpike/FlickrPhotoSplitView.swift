@@ -50,7 +50,6 @@ public class FlickrPhotoSplitView: BaseView {
     //MARK:- Variables
     //----------------------------------------------------------------------------------------
     var flickrPhotos: [FlickrPhoto]?
-    var isReversed = false
     
     lazy var menuBar: MenuBar = {
         let mb = MenuBar()
@@ -138,9 +137,8 @@ public class FlickrPhotoSplitView: BaseView {
     }
     
     func collectionViewDidSelectItem(at index: Int) {
-        let tableViewPosition = isReversed ? 1 : 0
         tableView?.scrollToItemSelectedInCollectionView(at: index)
-        splitView.scrollToItem(at: IndexPath(item: tableViewPosition, section: 0), at: [], animated: true)
+        splitView.scrollToItem(at: IndexPath(item: 0, section: 0), at: [], animated: true)
     }
     
     
@@ -150,6 +148,8 @@ public class FlickrPhotoSplitView: BaseView {
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let x = scrollView.contentOffset.x
         menuBar.horizontalBarLeftAnchorConstraint.constant = x / 2
+        let index = x / (MainScreen.Size.width / 2)
+        menuBar.selectItem(at: Int(index))
     }
     
     public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
@@ -197,11 +197,11 @@ extension FlickrPhotoSplitView: UICollectionViewDelegate, UICollectionViewDataSo
         
         if indexPath.item == 0 {
             
-            return isReversed ? cells.reversed()[indexPath.row] : cells[indexPath.row]
+            return cells[indexPath.row]
             
         } else {
             
-            return isReversed ? cells.reversed()[indexPath.row] : cells[indexPath.row]
+            return cells[indexPath.row]
         }
     }
     
@@ -215,5 +215,15 @@ extension FlickrPhotoSplitView: UICollectionViewDelegate, UICollectionViewDataSo
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: frame.width, height: frame.height - 50)
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let item = indexPath.item {
+            if item == 0  {
+                tableView?.reloadData()
+            } else {
+                self.collectionView?.reloadData()
+            }
+        }
     }
 }

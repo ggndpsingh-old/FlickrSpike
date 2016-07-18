@@ -21,6 +21,10 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate {
     var viewModel: GalleryViewModel!
     var pagesLoaded = 0
     
+    var isSearching = false
+    var searchString = ""
+    
+    
     lazy var flickrPhotoSplitView: FlickrPhotoSplitView = {
         let sv = FlickrPhotoSplitView(frame: CGRect.zero)
         sv.translatesAutoresizingMaskIntoConstraints = false
@@ -29,17 +33,36 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate {
         return sv
     }()
     
+    
+    lazy var searchBar: UISearchBar = {
+        let bar = UISearchBar(frame: CGRect.zero)
+        bar.delegate = self
+        bar.searchBarStyle = UISearchBarStyle.minimal
+        bar.placeholder = "Search Tags"
+        bar.autocapitalizationType = .none
+        bar.tintColor = UIColor.white()
+        let textField = bar.value(forKey: "searchField") as! UITextField
+        textField.textColor = UIColor.white()
+        return bar
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        automaticallyAdjustsScrollViewInsets = false
         viewModel = GalleryViewModel(delegate: self)
         fetchRecentPhotosFromFlickr()
         edgesForExtendedLayout = []
         
+        setupNavigationBar()
+        setupViews()
+    }
+    
+    func setupNavigationBar() {
         navigationController?.navigationBar.isTranslucent = false
         navigationController?.navigationBar.barTintColor = .navBar()
-        
-        setupViews()
+        navigationController?.hidesBarsOnSwipe = true
+        navigationItem.titleView = searchBar
     }
     
     func setupViews() {
@@ -75,7 +98,7 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate {
 extension GalleryViewController: FlickrPhotoSplitViewDelegate, FlickrPhotoSplitViewDataSource {
     
     func flickrPhotoSplitView(willDisplayLastItemFromflickrPhotos flickrPhotos: [FlickrPhoto]?) {
-        fetchRecentPhotosFromFlickr()
+        isSearching ? handleSearch() : fetchRecentPhotosFromFlickr()
     }
     
     func flickrPhotosToDisplay(in flickrPhotoSplitView: FlickrPhotoSplitView) -> [FlickrPhoto]? {
@@ -86,5 +109,60 @@ extension GalleryViewController: FlickrPhotoSplitViewDelegate, FlickrPhotoSplitV
         flickrPhotos = nil
         pagesLoaded = 0
         fetchRecentPhotosFromFlickr()
+    }
+}
+
+extension GalleryViewController: UISearchBarDelegate {
+    
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if let text = searchBar.text {
+            
+            flickrPhotos = nil
+            flickrPhotoSplitView.reloadData()
+            
+            NSObject.cancelPreviousPerformRequests(withTarget: self)
+            searchString = text
+            
+            if text == "" {
+                isSearching = false
+                fetchRecentPhotosFromFlickr()
+                
+            } else {
+                isSearching = true
+                self.perform(#selector(self.handleSearch), with: nil, afterDelay: 0.5)
+            }
+            
+        }
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(true, animated: true)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = ""
+        searchBar.endEditing(true)
+        searchBar.setShowsCancelButton(false, animated: true)
+    }
+    
+    func handleSearch() {
+        
+        pagesLoaded += 1
+        viewModel.searchflickrForTags(inString: searchString, onPage: pagesLoaded) { (searchedString, images, error) in
+            DispatchQueue.main.async {
+                if let current = self.flickrPhotos, loaded = images {
+                    
+                    if self.searchString == searchedString {
+                        self.flickrPhotos =  current + loaded
+                    } else {
+                        self.flickrPhotos = images
+                    }
+                    
+                } else {
+                    self.flickrPhotos = images
+                }
+            }
+        }
     }
 }
