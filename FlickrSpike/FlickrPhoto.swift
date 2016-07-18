@@ -8,7 +8,7 @@
 
 import Foundation
 
-class FlickrPhoto: NSObject {
+public class FlickrPhoto: NSObject {
     
     
     //MARK: Properties

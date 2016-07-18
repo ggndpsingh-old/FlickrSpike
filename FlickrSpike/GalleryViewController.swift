@@ -13,8 +13,7 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate {
     //MARK: Data
     var flickrPhotos: [FlickrPhoto]? {
         didSet {
-//            tableView.reloadData()
-            collectionView.reloadData()
+            flickrPhotoSplitView.reloadData()
         }
     }
     
@@ -22,28 +21,12 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate {
     var viewModel: GalleryViewModel!
     var pagesLoaded = 0
     
-    lazy var tableView: UITableView = {
-        var tv = UITableView(frame: CGRect.zero)
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.delegate = self
-        tv.dataSource = self
-        tv.rowHeight = UITableViewAutomaticDimension
-        tv.estimatedRowHeight = MainScreen.Size.width
-        tv.separatorStyle = .none
-        tv.register(FlickrPhotoTableViewCell.self, forCellReuseIdentifier: "flickrPhotoTableViewCell")
-        tv.register(FlickrPhotoDataCell.self, forCellReuseIdentifier: "flickrPhotoDataCell")
-        return tv
-    }()
-    
-    lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
-        cv.translatesAutoresizingMaskIntoConstraints = false
-        cv.backgroundColor = .white()
-        cv.delegate = self
-        cv.dataSource = self
-        cv.register(FlickrPhotoCollectionViewCell.self, forCellWithReuseIdentifier: "flickrPhotoCollectionViewCell")
-        return cv
+    lazy var flickrPhotoSplitView: FlickrPhotoSplitView = {
+        let sv = FlickrPhotoSplitView(frame: CGRect.zero)
+        sv.translatesAutoresizingMaskIntoConstraints = false
+        sv.delegate = self
+        sv.dataSource = self
+        return sv
     }()
     
     override func viewDidLoad() {
@@ -51,22 +34,18 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate {
         
         viewModel = GalleryViewModel(delegate: self)
         fetchRecentPhotosFromFlickr()
+        edgesForExtendedLayout = []
         
         setupViews()
     }
     
     func setupViews() {
-//        view.addSubview(tableView)
-//        tableView.leftAnchor.constraint     (equalTo: view.leftAnchor)  .isActive = true
-//        tableView.rightAnchor.constraint    (equalTo: view.rightAnchor) .isActive = true
-//        tableView.topAnchor.constraint      (equalTo: view.topAnchor)   .isActive = true
-//        tableView.bottomAnchor.constraint   (equalTo: view.bottomAnchor).isActive = true
         
-        view.addSubview(collectionView)
-        collectionView.leftAnchor.constraint     (equalTo: view.leftAnchor)  .isActive = true
-        collectionView.rightAnchor.constraint    (equalTo: view.rightAnchor) .isActive = true
-        collectionView.topAnchor.constraint      (equalTo: view.topAnchor)   .isActive = true
-        collectionView.bottomAnchor.constraint   (equalTo: view.bottomAnchor).isActive = true
+        view.addSubview(flickrPhotoSplitView)
+        flickrPhotoSplitView.leftAnchor.constraint     (equalTo: view.leftAnchor)  .isActive = true
+        flickrPhotoSplitView.rightAnchor.constraint    (equalTo: view.rightAnchor) .isActive = true
+        flickrPhotoSplitView.topAnchor.constraint      (equalTo: view.topAnchor)   .isActive = true
+        flickrPhotoSplitView.bottomAnchor.constraint   (equalTo: view.bottomAnchor).isActive = true
     }
     
     func fetchRecentPhotosFromFlickr() {
@@ -86,78 +65,23 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate {
     }
 }
 
-
-extension GalleryViewController: UITableViewDelegate, UITableViewDataSource {
+//----------------------------------------------------------------------------------------
+//MARK:
+//MARK: Flickr Photo Split View Data Source Methods
+//----------------------------------------------------------------------------------------
+extension GalleryViewController: FlickrPhotoSplitViewDelegate, FlickrPhotoSplitViewDataSource {
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 50
+    func flickrPhotoSplitView(willDisplayLastItemFromflickrPhotos flickrPhotos: [FlickrPhoto]?) {
+        fetchRecentPhotosFromFlickr()
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = FlickrPhotoTableHeaderView()
-        view.flickrPhoto = flickrPhotos?[section]
-        return view
+    func flickrPhotosToDisplay(in flickrPhotoSplitView: FlickrPhotoSplitView) -> [FlickrPhoto]? {
+        return flickrPhotos
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return flickrPhotos?.count ?? 0
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let flickrPhoto = flickrPhotos?[indexPath.section]
-        if indexPath.row == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "flickrPhotoTableViewCell") as! FlickrPhotoTableViewCell
-            cell.flickrPhoto = flickrPhoto
-            return cell
-            
-        } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "flickrPhotoDataCell") as! FlickrPhotoDataCell
-            cell.flickrPhoto = flickrPhoto
-            return cell
-        }
-    }
-}
-
-
-
-extension GalleryViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return flickrPhotos?.count ?? 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "flickrPhotoCollectionViewCell", for: indexPath) as! FlickrPhotoCollectionViewCell
-        cell.flickrPhoto = flickrPhotos?[indexPath.item!]
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let distance = 2 / MainScreen.Scale
-        return CGSize(width: (MainScreen.Size.width / 3) - distance, height: (MainScreen.Size.width / 3) - distance)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let item = indexPath.item, count = flickrPhotos?.count {
-            if item == count - 1 {
-                fetchRecentPhotosFromFlickr()
-            }
-        }
+    func resetflickrPhotos(in flickrPhotoSplitView: FlickrPhotoSplitView) {
+        flickrPhotos = nil
+        pagesLoaded = 0
+        fetchRecentPhotosFromFlickr()
     }
 }
