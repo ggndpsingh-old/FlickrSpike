@@ -17,6 +17,8 @@
 		CEC198AE1D3CA2FA00BF7F5F /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC198AB1D3CA2FA00BF7F5F /* BaseView.swift */; };
 		CEC198AF1D3CA2FA00BF7F5F /* BaseTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC198AC1D3CA2FA00BF7F5F /* BaseTableCell.swift */; };
 		CEC198B01D3CA2FA00BF7F5F /* BaseCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC198AD1D3CA2FA00BF7F5F /* BaseCollectionCell.swift */; };
+		CEC198B31D3CA3AD00BF7F5F /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC198B21D3CA3AD00BF7F5F /* GalleryViewController.swift */; };
+		CEC198B51D3CA3D000BF7F5F /* GalleryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC198B41D3CA3D000BF7F5F /* GalleryViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +55,8 @@
 		CEC198AB1D3CA2FA00BF7F5F /* BaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		CEC198AC1D3CA2FA00BF7F5F /* BaseTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTableCell.swift; sourceTree = "<group>"; };
 		CEC198AD1D3CA2FA00BF7F5F /* BaseCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseCollectionCell.swift; sourceTree = "<group>"; };
+		CEC198B21D3CA3AD00BF7F5F /* GalleryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
+		CEC198B41D3CA3D000BF7F5F /* GalleryViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,8 +109,9 @@
 			children = (
 				CEC198A91D3CA2C500BF7F5F /* Asset */,
 				CEC198A81D3CA2B300BF7F5F /* Helper */,
-				CEC198AA1D3CA2CC00BF7F5F /* Controller */,
 				CEC198B11D3CA2FE00BF7F5F /* View */,
+				CEC198B61D3CA3D300BF7F5F /* ViewModel */,
+				CEC198AA1D3CA2CC00BF7F5F /* Controller */,
 			);
 			path = FlickrSpike;
 			sourceTree = "<group>";
@@ -152,6 +157,7 @@
 		CEC198AA1D3CA2CC00BF7F5F /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				CEC198B21D3CA3AD00BF7F5F /* GalleryViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -164,6 +170,14 @@
 				CEC198AD1D3CA2FA00BF7F5F /* BaseCollectionCell.swift */,
 			);
 			name = View;
+			sourceTree = "<group>";
+		};
+		CEC198B61D3CA3D300BF7F5F /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				CEC198B41D3CA3D000BF7F5F /* GalleryViewModel.swift */,
+			);
+			name = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -306,9 +320,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE09CDF01D3B72AE00B04E5B /* AppDelegate.swift in Sources */,
+				CEC198B31D3CA3AD00BF7F5F /* GalleryViewController.swift in Sources */,
 				CE09CE581D3B79DA00B04E5B /* Constants.swift in Sources */,
 				CEC198AF1D3CA2FA00BF7F5F /* BaseTableCell.swift in Sources */,
 				CEC198A71D3CA10900BF7F5F /* Extensions.swift in Sources */,
+				CEC198B51D3CA3D000BF7F5F /* GalleryViewModel.swift in Sources */,
 				CEC198B01D3CA2FA00BF7F5F /* BaseCollectionCell.swift in Sources */,
 				CEC198AE1D3CA2FA00BF7F5F /* BaseView.swift in Sources */,
 			);
