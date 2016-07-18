@@ -114,8 +114,10 @@ public class FlickrPhotoCollectionView: UICollectionView, UICollectionViewDelega
         let rect = collectionView.layoutAttributesForItem(at: indexPath)?.frame
         let view = ErrorMessageView()
         
+        let cellFrame = collectionView.convert(rect!, to: collectionView.superview)
+        
         if let flickrPhoto = flickrPhotos?[indexPath.item!] {
-                view.show(flickrPhoto: flickrPhoto, withIntialRect: rect!)
+                view.show(flickrPhoto: flickrPhoto, withIntialRect: cellFrame)
         }
     }
     

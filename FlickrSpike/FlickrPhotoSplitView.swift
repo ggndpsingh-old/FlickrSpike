@@ -161,10 +161,6 @@ public class FlickrPhotoSplitView: BaseView {
     //MARK:- Menu Bar Helpers
     //----------------------------------------------------------------------------------------
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let x = scrollView.contentOffset.x
-        menuBar.horizontalBarLeftAnchorConstraint.constant = x / 2
-        let index = x / (MainScreen.Size.width / 2)
-        menuBar.selectItem(at: Int(index))
     }
     
     public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
@@ -180,6 +176,7 @@ public class FlickrPhotoSplitView: BaseView {
     func scrollToIndex(index: Int) {
         let indexPath = IndexPath(item: index, section: 0)
         splitView?.scrollToItem(at: indexPath, at: [], animated: true)
+        menuBar.selectItem(at: Int(index))
     }
 }
 
