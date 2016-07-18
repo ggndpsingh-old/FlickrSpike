@@ -10,6 +10,10 @@ import UIKit
 
 class MenuCell: BaseCollectionCell {
     
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: UI Elements
+    //----------------------------------------------------------------------------------------
     let imageView: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -18,6 +22,11 @@ class MenuCell: BaseCollectionCell {
         return iv
     }()
     
+    
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: Behavior
+    //----------------------------------------------------------------------------------------
     override var isHighlighted: Bool {
         didSet {
             imageView.tintColor = isHighlighted ? .menuBarTint() : .lightGray()
@@ -30,6 +39,11 @@ class MenuCell: BaseCollectionCell {
         }
     }
     
+    
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: Setup Views
+    //----------------------------------------------------------------------------------------
     override func setupViews() {
         super.setupViews()
         

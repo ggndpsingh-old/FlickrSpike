@@ -10,6 +10,11 @@ import UIKit
 
 class FlickrPhotoCollectionContainerCell: BaseCollectionCell {
     
+    
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: UI Elements
+    //----------------------------------------------------------------------------------------
     lazy internal var collectionView: FlickrPhotoCollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -19,6 +24,10 @@ class FlickrPhotoCollectionContainerCell: BaseCollectionCell {
     }()
     
     
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: Setup Views
+    //----------------------------------------------------------------------------------------
     override func setupViews() {
         
         addSubview(collectionView)

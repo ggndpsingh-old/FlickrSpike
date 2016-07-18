@@ -13,7 +13,7 @@ public class FlickrPhotoTableView: UITableView, UITableViewDataSource, UITableVi
 
     //----------------------------------------------------------------------------------------
     //MARK:
-    //MARK: Variables
+    //MARK: Data
     //----------------------------------------------------------------------------------------
     var flickrPhotos: [FlickrPhoto]? {
         didSet {
@@ -21,6 +21,10 @@ public class FlickrPhotoTableView: UITableView, UITableViewDataSource, UITableVi
         }
     }
     
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: UI Elements
+    //----------------------------------------------------------------------------------------
     lazy public var refresher: UIRefreshControl! = {
         let rc = UIRefreshControl()
         rc.addTarget(self, action: #selector(reload), for: .valueChanged)
@@ -28,6 +32,10 @@ public class FlickrPhotoTableView: UITableView, UITableViewDataSource, UITableVi
     }()
     
     
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: Variables
+    //----------------------------------------------------------------------------------------
     var splitView: FlickrPhotoSplitView!
     
     

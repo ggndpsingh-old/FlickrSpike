@@ -11,7 +11,10 @@ import UIKit
 
 class FlickrPhotoTableHeaderView: BaseView {
     
+    //----------------------------------------------------------------------------------------
+    //MARK:
     //MARK: Data
+    //----------------------------------------------------------------------------------------
     var flickrPhoto: FlickrPhoto? {
         didSet {
             if let name = flickrPhoto?.ownerName {
@@ -21,7 +24,10 @@ class FlickrPhotoTableHeaderView: BaseView {
     }
     
     
-    //MARK: Views
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: UI Elements
+    //----------------------------------------------------------------------------------------
     let usernameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -31,9 +37,9 @@ class FlickrPhotoTableHeaderView: BaseView {
     }()
     
     let optionsButton: UIButton = {
-        let button = UIButton(type: UIButtonType.detailDisclosure)
+        let button = UIButton(frame: CGRect.zero)
         button.translatesAutoresizingMaskIntoConstraints = false
-//        button.setImage(Images.OptionsButtonImage, for: [])
+        button.setImage(Images.OptionsButtonImage, for: [])
         return button
     }()
     
@@ -45,22 +51,29 @@ class FlickrPhotoTableHeaderView: BaseView {
     }()
     
     
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: Setup Views
+    //----------------------------------------------------------------------------------------
     override func setupViews() {
         
         backgroundColor = UIColor.white()
         
+        //Separator
         addSubview(separator)
         separator.heightAnchor.constraint   (equalToConstant: 1 / MainScreen.Scale)     .isActive = true
         separator.topAnchor.constraint      (equalTo: topAnchor)                        .isActive = true
         separator.leftAnchor.constraint     (equalTo: leftAnchor)                       .isActive = true
         separator.rightAnchor.constraint    (equalTo: rightAnchor)                      .isActive = true
         
+        //Username Label
         addSubview(usernameLabel)
         usernameLabel.topAnchor.constraint      (equalTo: topAnchor)                    .isActive = true
         usernameLabel.bottomAnchor.constraint   (equalTo: bottomAnchor)                 .isActive = true
         usernameLabel.leftAnchor.constraint     (equalTo: leftAnchor, constant: 20)     .isActive = true
         usernameLabel.rightAnchor.constraint    (equalTo: rightAnchor, constant: -70)   .isActive = true
         
+        //Options Button
         addSubview(optionsButton)
         optionsButton.rightAnchor.constraint    (equalTo: rightAnchor, constant: -10)   .isActive = true
         optionsButton.heightAnchor.constraint   (equalToConstant: 50)                   .isActive = true

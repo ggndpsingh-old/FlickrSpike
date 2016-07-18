@@ -10,17 +10,11 @@ import UIKit
 
 class FlickrPhotoTableViewCell: BaseTableCell {
     
-    var tableView: FlickrPhotoTableView?
     
-    
-    lazy var longTap: UILongPressGestureRecognizer = {
-        let lt = UILongPressGestureRecognizer()
-        lt.addTarget(self, action: #selector(showImageOptions))
-        return lt
-    }()
-    
-    
+    //----------------------------------------------------------------------------------------
+    //MARK:
     //MARK: Data
+    //----------------------------------------------------------------------------------------
     var flickrPhoto: FlickrPhoto? {
         didSet {
             if let urlString = flickrPhoto?.imageUrl {
@@ -31,7 +25,23 @@ class FlickrPhotoTableViewCell: BaseTableCell {
         }
     }
     
-    //MARK: Views
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: Parent Table View
+    //----------------------------------------------------------------------------------------
+    var tableView: FlickrPhotoTableView?
+    
+    
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: UI Elements
+    //----------------------------------------------------------------------------------------
+    lazy var longTap: UILongPressGestureRecognizer = {
+        let lt = UILongPressGestureRecognizer()
+        lt.addTarget(self, action: #selector(showImageOptions))
+        return lt
+    }()
+    
     let photoView: UIImageView = {
         let pv = UIImageView(frame: CGRect.zero)
         pv.translatesAutoresizingMaskIntoConstraints = false
@@ -42,7 +52,10 @@ class FlickrPhotoTableViewCell: BaseTableCell {
     }()
     
     
+    //----------------------------------------------------------------------------------------
+    //MARK:
     //MARK: Setup Views
+    //----------------------------------------------------------------------------------------
     override func setupViews() {
         
         addSubview(photoView)
@@ -55,6 +68,11 @@ class FlickrPhotoTableViewCell: BaseTableCell {
         
     }
     
+    
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: Method for Image Options Action Sheet
+    //----------------------------------------------------------------------------------------
     func showImageOptions() {
         tableView?.showImagesOptions(forFlickrPhoto: flickrPhoto!, andImage: photoView.image!)
     }

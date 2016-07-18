@@ -11,7 +11,10 @@ import UIKit
 
 class FlickrPhotoTableContainerCell: BaseCollectionCell {
     
+    //----------------------------------------------------------------------------------------
+    //MARK:
     //MARK: Data
+    //----------------------------------------------------------------------------------------
     var flickrPhotos: [FlickrPhoto]? {
         didSet {
             tableView.flickrPhotos = flickrPhotos
@@ -19,13 +22,21 @@ class FlickrPhotoTableContainerCell: BaseCollectionCell {
     }
     
     
-    //MARK: Views
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: UI Elements
+    //----------------------------------------------------------------------------------------
     var tableView: FlickrPhotoTableView = {
         let tv = FlickrPhotoTableView(frame: CGRect.zero)
         tv.translatesAutoresizingMaskIntoConstraints = false
         return tv
     }()
     
+    
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: Setup Views
+    //----------------------------------------------------------------------------------------
     override func setupViews() {
         
         addSubview(tableView)
@@ -34,11 +45,6 @@ class FlickrPhotoTableContainerCell: BaseCollectionCell {
         tableView.topAnchor.constraint      (equalTo: topAnchor)    .isActive = true
         tableView.bottomAnchor.constraint   (equalTo: bottomAnchor) .isActive = true
     }
-    
-    func handleReload() {
-        flickrPhotos = [FlickrPhoto]()
-    }
-    
 }
 
 

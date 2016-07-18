@@ -10,7 +10,10 @@ import UIKit
 
 class FlickrPhotoDataCell: BaseTableCell {
     
+    //----------------------------------------------------------------------------------------
+    //MARK:
     //MARK: Data
+    //----------------------------------------------------------------------------------------
     var flickrPhoto: FlickrPhoto? {
         didSet {
             setupLabels()
@@ -18,7 +21,10 @@ class FlickrPhotoDataCell: BaseTableCell {
     }
     
     
-    //MARK: Views
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: UI Elements
+    //----------------------------------------------------------------------------------------
     var tagsLabel: UILabel = {
         let label = UILabel(frame: CGRect.zero)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -41,7 +47,10 @@ class FlickrPhotoDataCell: BaseTableCell {
     
     
     
+    //----------------------------------------------------------------------------------------
+    //MARK:
     //MARK: Setup Labels
+    //----------------------------------------------------------------------------------------
     func setupLabels() {
         
         //Remove labels before each reuse of cell
@@ -50,7 +59,6 @@ class FlickrPhotoDataCell: BaseTableCell {
         timeLabel.removeFromSuperview()
         
         
-        //Setup Labels
         if let views = flickrPhoto?.views {
             viewsLabel = createLabel(withAddedBoldString: "Views:", toString: views, withFontSize: 13)
         }
@@ -86,8 +94,10 @@ class FlickrPhotoDataCell: BaseTableCell {
     }
     
     
-    
+    //----------------------------------------------------------------------------------------
+    //MARK:
     //MARK: Method to create String with Bold Initial string
+    //----------------------------------------------------------------------------------------
     func createLabel(withAddedBoldString boldString: String, toString string: String, withFontSize fontSize: CGFloat) -> UILabel {
         
         let boldAttribute = [NSFontAttributeName: UIFont.boldSystemFont(ofSize: fontSize)]

@@ -8,7 +8,10 @@
 
 import UIKit
 
+//----------------------------------------------------------------------------------------
+//MARK:
 //MARK: Date
+//----------------------------------------------------------------------------------------
 extension Date {
     func longFormat() -> String {
         let dateFormatter = DateFormatter()
@@ -26,7 +29,10 @@ extension Date {
 
 
 
+//----------------------------------------------------------------------------------------
+//MARK:
 //MARK: UIImage
+//----------------------------------------------------------------------------------------
 
 //MARK:- Cache
 let imageCache = Cache<AnyObject, UIImage>()
@@ -63,7 +69,10 @@ extension UIImageView {
 
 
 
+//----------------------------------------------------------------------------------------
+//MARK:
 //MARK: UIColor
+//----------------------------------------------------------------------------------------
 extension UIColor {
     class func navBar() -> UIColor {
         return UIColor(red: 40/255, green: 40/255, blue: 40/255, alpha: 1)
@@ -88,4 +97,25 @@ extension UIColor {
     class func separator() -> UIColor {
         return UIColor(red: 220/255, green: 220/255, blue: 220/255, alpha: 1)
     }
+}
+
+
+//----------------------------------------------------------------------------------------
+//MARK:
+//MARK: String
+//----------------------------------------------------------------------------------------
+extension String {
+    
+    //To trim while spaces from left and right of a string
+    func trim() -> String {
+        return self.trimmingCharacters(in: .whitespaces)
+    }
+    
+    //To condense white spaces wihtin the string
+    func condenseWhitespace() -> String {
+        let components = self.components(separatedBy: .whitespaces)
+        let filtered = components.filter({!$0.isEmpty})
+        return filtered.joined(separator: " ")
+    }
+    
 }

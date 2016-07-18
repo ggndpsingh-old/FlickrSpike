@@ -11,7 +11,10 @@ import Foundation
 public class FlickrPhoto: NSObject {
     
     
+    //----------------------------------------------------------------------------------------
+    //MARK:
     //MARK: Properties
+    //----------------------------------------------------------------------------------------
     var id          : String?
     var title       : String?
     
@@ -28,7 +31,10 @@ public class FlickrPhoto: NSObject {
     var published   : Date?
     
     
+    //----------------------------------------------------------------------------------------
+    //MARK:
     //MARK: Initializers
+    //----------------------------------------------------------------------------------------
     init(withFlickrPhoto photo: NSDictionary) {
         super.init()
         
@@ -48,6 +54,11 @@ public class FlickrPhoto: NSObject {
         createUrls(forFlickrPhoto: photo)
     }
     
+    
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: Create Urls
+    //----------------------------------------------------------------------------------------
     func createUrls(forFlickrPhoto photo: NSDictionary) {
         
         let farm    = photo["farm"]     as? Int

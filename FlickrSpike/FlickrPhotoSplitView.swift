@@ -41,6 +41,7 @@ public class FlickrPhotoSplitView: BaseView {
     
     
     //----------------------------------------------------------------------------------------
+    //MARK:
     //MARK:- Delegate & Data Source
     //----------------------------------------------------------------------------------------
     var delegate    : FlickrPhotoSplitViewDelegate!
@@ -49,10 +50,15 @@ public class FlickrPhotoSplitView: BaseView {
     
     
     //----------------------------------------------------------------------------------------
-    //MARK:- Variables
+    //MARK:
+    //MARK:- Data
     //----------------------------------------------------------------------------------------
     var flickrPhotos: [FlickrPhoto]?
     
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK:- UI Elements
+    //----------------------------------------------------------------------------------------
     lazy var menuBar: MenuBar = {
         let mb = MenuBar()
         mb.translatesAutoresizingMaskIntoConstraints = false
@@ -91,6 +97,7 @@ public class FlickrPhotoSplitView: BaseView {
     
     
     //----------------------------------------------------------------------------------------
+    //MARK:
     //MARK:- Setup Views
     //----------------------------------------------------------------------------------------
     override func setupViews() {
@@ -115,6 +122,7 @@ public class FlickrPhotoSplitView: BaseView {
     
     
     //----------------------------------------------------------------------------------------
+    //MARK:
     //MARK:- Table & Collection View Helper Methods
     //----------------------------------------------------------------------------------------
     func reset() {
@@ -149,6 +157,7 @@ public class FlickrPhotoSplitView: BaseView {
     
     
     //----------------------------------------------------------------------------------------
+    //MARK:
     //MARK:- Menu Bar Helpers
     //----------------------------------------------------------------------------------------
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {

@@ -11,7 +11,10 @@ import UIKit
 
 class FlickrPhotoCollectionViewCell: BaseCollectionCell {
     
+    //----------------------------------------------------------------------------------------
+    //MARK:
     //MARK: Data
+    //----------------------------------------------------------------------------------------
     var flickrPhoto: FlickrPhoto? {
         didSet {
             if let urlString = flickrPhoto?.thumbUrl {
@@ -20,7 +23,10 @@ class FlickrPhotoCollectionViewCell: BaseCollectionCell {
         }
     }
     
-    //MARK: Views
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: UI Elements
+    //----------------------------------------------------------------------------------------
     let photoView: UIImageView = {
         let pv = UIImageView(frame: CGRect.zero)
         pv.translatesAutoresizingMaskIntoConstraints = false
@@ -29,6 +35,11 @@ class FlickrPhotoCollectionViewCell: BaseCollectionCell {
         return pv
     }()
     
+    
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: Setup Views
+    //----------------------------------------------------------------------------------------
     override func setupViews() {
         
         addSubview(photoView)
@@ -39,6 +50,10 @@ class FlickrPhotoCollectionViewCell: BaseCollectionCell {
         
     }
     
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: Prpare for reuse
+    //----------------------------------------------------------------------------------------
     override func prepareForReuse() {
         
         photoView.image = nil

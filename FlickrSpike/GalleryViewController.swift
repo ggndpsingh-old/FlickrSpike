@@ -11,7 +11,12 @@ import MessageUI
 
 class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate {
 
+    
+    //----------------------------------------------------------------------------------------
+    //MARK:
     //MARK: Data
+    //----------------------------------------------------------------------------------------
+
     var flickrPhotos: [FlickrPhoto]? {
         didSet {
             flickrPhotoSplitView.reloadData()
@@ -28,14 +33,25 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailC
         }
     }
     
+    
+    
+    //----------------------------------------------------------------------------------------
+    //MARK:
     //MARK: Variables
+    //----------------------------------------------------------------------------------------
+    
+    //MARK:- View Model for API Methods
     var viewModel: GalleryViewModel!
+    
+    //MARK:- Track number of plages loaded
     var pagesLoaded = 0
     
+    
+    //MARK:- Search Helpers
     var isSearching = false
     var searchString = ""
     
-    
+    //MARK:- Split View to show Table View & Collection View
     lazy var flickrPhotoSplitView: FlickrPhotoSplitView = {
         let sv = FlickrPhotoSplitView(frame: CGRect.zero)
         sv.translatesAutoresizingMaskIntoConstraints = false
@@ -44,7 +60,20 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailC
         return sv
     }()
     
+    //MARK:- Details Label
+    let detailsLabel: UILabel = {
+        let label = UILabel(frame: CGRect.zero)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.backgroundColor = .navBar()
+        label.textColor = .white()
+        label.font = UIFont.boldSystemFont(ofSize: 12)
+        label.adjustsFontSizeToFitWidth = true
+        label.text = "Showing Everything"
+        return label
+    }()
     
+    //MARK:- Search Bar
     lazy var searchBar: UISearchBar = {
         let bar = UISearchBar(frame: CGRect.zero)
         bar.delegate = self
@@ -57,30 +86,47 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailC
         return bar
     }()
     
-    let detailsLabel: UILabel = {
-        let label = UILabel(frame: CGRect.zero)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .center
-        label.backgroundColor = .navBar()
-        label.textColor = .white()
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.adjustsFontSizeToFitWidth = true
-        label.text = "Showing Everything"
-        return label
+    //MARK:- Tap to dismiss keyboard
+    lazy var tap: UITapGestureRecognizer = {
+        let tap = UITapGestureRecognizer()
+        tap.addTarget(self, action: #selector(dismissKeyboard))
+        return tap
     }()
     
+    //MARK:- Spinner
+    let spinner: UIActivityIndicatorView = {
+        let av = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        av.translatesAutoresizingMaskIntoConstraints = false
+        av.hidesWhenStopped = true
+        return av
+    }()
+    
+    
+    
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: View Controller Lifecycle
+    //----------------------------------------------------------------------------------------
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        automaticallyAdjustsScrollViewInsets = false
+        //Initialize View Model
         viewModel = GalleryViewModel(delegate: self)
-        fetchRecentPhotosFromFlickr()
+        
+        automaticallyAdjustsScrollViewInsets = false
         edgesForExtendedLayout = []
         
         setupNavigationBar()
         setupViews()
+        
+        fetchRecentPhotosFromFlickr()
     }
     
+    
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: Setup View
+    //----------------------------------------------------------------------------------------
     func setupNavigationBar() {
         navigationController?.navigationBar.isTranslucent = false
         navigationController?.navigationBar.barTintColor = .navBar()
@@ -96,6 +142,12 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailC
         detailsLabel.topAnchor.constraint      (equalTo: view.topAnchor)   .isActive = true
         detailsLabel.heightAnchor.constraint   (equalToConstant: 20)       .isActive = true
         
+        view.addSubview(spinner)
+        spinner.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        spinner.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        spinner.centerXAnchor.constraint(equalTo: detailsLabel.centerXAnchor).isActive = true
+        spinner.centerYAnchor.constraint(equalTo: detailsLabel.centerYAnchor).isActive = true
+        
         view.addSubview(flickrPhotoSplitView)
         flickrPhotoSplitView.leftAnchor.constraint     (equalTo: view.leftAnchor)  .isActive = true
         flickrPhotoSplitView.rightAnchor.constraint    (equalTo: view.rightAnchor) .isActive = true
@@ -103,6 +155,11 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailC
         flickrPhotoSplitView.bottomAnchor.constraint   (equalTo: view.bottomAnchor).isActive = true
     }
     
+    
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: Fetch Photos from Flickr
+    //----------------------------------------------------------------------------------------
     func fetchRecentPhotosFromFlickr() {
         viewModel.fetchRecentImagesFromFlickr(atPage: pagesLoaded) { (loadedPhotos, error) in
             DispatchQueue.main.async {
@@ -118,28 +175,57 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailC
         }
         pagesLoaded += 1
     }
+    
+    func showProcessing() {
+        detailsLabel.text = ""
+        spinner.startAnimating()
+    }
+    
+    func hideProcessing() {
+        DispatchQueue.main.async {
+            self.spinner.stopAnimating()
+        }
+    }
 }
+
+
+
 
 //----------------------------------------------------------------------------------------
 //MARK:
 //MARK: Flickr Photo Split View Data Source Methods
 //----------------------------------------------------------------------------------------
+
 extension GalleryViewController: FlickrPhotoSplitViewDelegate, FlickrPhotoSplitViewDataSource {
     
+    /*
+        Called when Table View OR Collection View is about to show to last Photo
+        Loads more photos from Flickr
+    */
     func flickrPhotoSplitView(willDisplayLastItemFromflickrPhotos flickrPhotos: [FlickrPhoto]?) {
         isSearching ? handleSearch() : fetchRecentPhotosFromFlickr()
     }
     
+    
+    /*
+        Returns the Photos to be displayed in Table View & Collection View
+     */
     func flickrPhotosToDisplay(in flickrPhotoSplitView: FlickrPhotoSplitView) -> [FlickrPhoto]? {
         return flickrPhotos
     }
     
+    /*
+        Called from Refresh Controler in Table View & Collection View
+     */
     func resetflickrPhotos(in flickrPhotoSplitView: FlickrPhotoSplitView) {
         flickrPhotos = nil
         pagesLoaded = 0
         fetchRecentPhotosFromFlickr()
     }
     
+    /*
+        Displays the Options Action Sheet for a Photo
+     */
     func showOptionsForFlickrPhoto(flickrPhoto: FlickrPhoto, withImageFile image: UIImage) {
         
         let actionSheet = UIAlertController(title: "Photo Options", message: nil, preferredStyle: .actionSheet)
@@ -176,6 +262,10 @@ extension GalleryViewController: FlickrPhotoSplitViewDelegate, FlickrPhotoSplitV
         present(actionSheet, animated: true, completion: nil)
     }
     
+    
+    /*
+        Result method for Saving Image to Device
+     */
     func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Void>) {
         if error == nil {
             print("Success")
@@ -184,40 +274,81 @@ extension GalleryViewController: FlickrPhotoSplitViewDelegate, FlickrPhotoSplitV
         }
     }
     
+    
+    /*
+        Result method for Mail Compose Controller
+     */
     @objc(mailComposeController:didFinishWithResult:error:) func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: NSError?) {
         dismiss(animated: true, completion: nil)
         
     }
 }
 
+
+
+
+//----------------------------------------------------------------------------------------
+//MARK:
+//MARK: Search Handling
+//----------------------------------------------------------------------------------------
+
 extension GalleryViewController: UISearchBarDelegate {
     
+    func searchBar(_ searchBar: UISearchBar, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        
+        //If search bar is empty and the entereted text is a whitespace, do nothing
+        if searchBar.text! == "" && text.trim().condenseWhitespace() == "" {
+            return false
+        
+        }
+        return true
+    }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
         if let text = searchBar.text {
             
-            flickrPhotos = nil
-            flickrPhotoSplitView.reloadData()
-            
+            //Only perform a search operation is the user stop typing for at least 0.5 seconds
             NSObject.cancelPreviousPerformRequests(withTarget: self)
-            searchString = text
             
-            if text == "" {
-                isSearching = false
-                fetchRecentPhotosFromFlickr()
+            //Remove whitespaces from Search String
+            searchString = text.trim().condenseWhitespace()
+            
+            //At least three characters are required to perform a search
+            if searchText.characters.count >= 3 {
                 
-            } else {
+                flickrPhotos = nil
+                flickrPhotoSplitView.reloadData()
+                
                 isSearching = true
                 self.perform(#selector(self.handleSearch), with: nil, afterDelay: 0.5)
+                
+            //If seach bar has been cleared, reset photos
+            } else if searchText == "" {
+                
+                flickrPhotos = nil
+                flickrPhotoSplitView.reloadData()
+                
+                isSearching = false
+                fetchRecentPhotosFromFlickr()
             }
             
         }
     }
     
+    
+    //Add Tap to dismiss keyboard to view
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchBar.setShowsCancelButton(true, animated: true)
+        view.addGestureRecognizer(tap)
     }
     
+    //Remove Tap to dismiss keyboard from view
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        view.removeGestureRecognizer(tap)
+    }
+    
+    //Hancel search cancel
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         
         isSearching = false
@@ -231,6 +362,13 @@ extension GalleryViewController: UISearchBarDelegate {
         }
     }
     
+    //Hide keyboard on return key pressed
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
+    }
+    
+    
+    //MARK:- Handle Search
     func handleSearch() {
         
         pagesLoaded += 1
@@ -249,5 +387,11 @@ extension GalleryViewController: UISearchBarDelegate {
                 }
             }
         }
+    }
+    
+    
+    //MARK:- Dismiss Keyboard
+    func dismissKeyboard() {
+        searchBar.endEditing(true)
     }
 }

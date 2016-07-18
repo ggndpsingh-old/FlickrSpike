@@ -26,13 +26,18 @@ public class FlickrPhotoCollectionView: UICollectionView, UICollectionViewDelega
         }
     }
     
+    var splitView: FlickrPhotoSplitView!
+    
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: UI Elements
+    //----------------------------------------------------------------------------------------
     lazy public var refresher: UIRefreshControl! = {
         let rc = UIRefreshControl()
         rc.addTarget(self, action: #selector(reload), for: .valueChanged)
         return rc
     }()
     
-    var splitView: FlickrPhotoSplitView!
     
     
     //----------------------------------------------------------------------------------------
@@ -105,7 +110,7 @@ public class FlickrPhotoCollectionView: UICollectionView, UICollectionViewDelega
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        splitView.collectionViewDidSelectItem(at: indexPath.item!)
+        splitView.collectionViewDidSelectItem(at: indexPath.item!)        
     }
     
     

@@ -9,20 +9,44 @@
 import UIKit
 
 
+//----------------------------------------------------------------------------------------
+//MARK:
 //MARK: Flickr API
+//----------------------------------------------------------------------------------------
 struct FlickrAPI {
     static let Key              = "df0351148fbb8b07bcbe35fb49899313"
     static let Secret           = "f5663bb7cd86f419"
     
+    static let SearchBaseUrl    = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=\(Key)"
+    static let RecentBaseUrl    = "https://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=\(Key)"
+    static let Arguments        = "tag_mode=all&format=json&nojsoncallback=1&extras=owner_name,date_upload,tags,views"
+    
     static let ImagesPerPage    = 50
     
-    static let SearchBaseUrl    = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=\(FlickrAPI.Key)"
-    static let RecentBaseUrl    = "https://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=\(FlickrAPI.Key)"
+    static let SafeSearch       = SafeArguments.Safe
+    
+    enum SafeArguments: Int {
+        case Safe       = 1
+        case Moderate   = 2
+        case Restricted = 3
+    }
 }
 
 
+//----------------------------------------------------------------------------------------
+//MARK:
 //MARK: Screen Constants
+//----------------------------------------------------------------------------------------
 struct MainScreen {
     static let Size  = UIScreen.main().bounds
     static let Scale = UIScreen.main().scale
+}
+
+
+//----------------------------------------------------------------------------------------
+//MARK:
+//MARK: Images
+//----------------------------------------------------------------------------------------
+struct Images {
+    static let OptionsButtonImage   = UIImage(named: "icon-options")
 }
