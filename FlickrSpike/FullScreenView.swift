@@ -19,7 +19,6 @@ class FullScreenView: UIScrollView {
     
     var photoWindow: UIWindow? = {
         let window = UIWindow(frame: CGRect(x: 0, y: 0, width: MainScreen.Size.width, height: MainScreen.Size.height))
-        window.backgroundColor = .black()
         return window
     }()
     
@@ -365,10 +364,9 @@ class FullScreenView: UIScrollView {
         //Present the Window to the user
         photoWindow!.makeKeyAndVisible()
         
-        //Show Message
         UIView.animate(withDuration: 0.001, delay: 0, options: .curveEaseOut, animations: {
             
-            //This intial shot animation sets the above given constraints
+            //This intial short animation sets the above given constraints
             self.layoutIfNeeded()
             
         }) { _ in

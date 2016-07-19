@@ -29,7 +29,6 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailC
                     detailsLabel.text = "Showing \(count) Recent Photos"
                 }
             }
-            
         }
     }
     
@@ -176,10 +175,17 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailC
         pagesLoaded += 1
     }
     
+    
+    
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: Delegate methods for View Model
+    //----------------------------------------------------------------------------------------
     func showProcessing() {
         detailsLabel.text = ""
         spinner.startAnimating()
     }
+    
     
     func hideProcessing() {
         DispatchQueue.main.async {
@@ -193,7 +199,7 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailC
 
 //----------------------------------------------------------------------------------------
 //MARK:
-//MARK: Flickr Photo Split View Data Source Methods
+//MARK: Flickr Photo Split View Delegate & Data Source Methods
 //----------------------------------------------------------------------------------------
 
 extension GalleryViewController: FlickrPhotoSplitViewDelegate, FlickrPhotoSplitViewDataSource {
@@ -208,11 +214,12 @@ extension GalleryViewController: FlickrPhotoSplitViewDelegate, FlickrPhotoSplitV
     
     
     /*
-        Returns the Photos to be displayed in Table View & Collection View
+        Sends the Photos to be displayed to Table View & Collection View
      */
     func flickrPhotosToDisplay(in flickrPhotoSplitView: FlickrPhotoSplitView) -> [FlickrPhoto]? {
         return flickrPhotos
     }
+    
     
     /*
         Called from Refresh Controler in Table View & Collection View
@@ -223,23 +230,31 @@ extension GalleryViewController: FlickrPhotoSplitViewDelegate, FlickrPhotoSplitV
         fetchRecentPhotosFromFlickr()
     }
     
+    
     /*
         Displays the Options Action Sheet for a Photo
      */
     func showOptionsForFlickrPhoto(flickrPhoto: FlickrPhoto, withImageFile image: UIImage) {
         
+        //Create Action Sheet Controller
         let actionSheet = UIAlertController(title: "Photo Options", message: nil, preferredStyle: .actionSheet)
         
+        
+        //Save Photo To Gallery Action
         let saveAction = UIAlertAction(title: "Save Photo", style: .default) { _ in
             UIImageWriteToSavedPhotosAlbum(image, self, #selector(self.image(image:didFinishSavingWithError:contextInfo:)), nil)
         }
         
+        
+        //Open Photo in Safari Action
         let openInSafariAction = UIAlertAction(title: "Open in Safari", style: .default) { _ in
             if let url = flickrPhoto.flickrUrl {
                 UIApplication.shared().open(URL(string: url)!, options: [:], completionHandler: nil)
             }
         }
         
+        
+        //Send Photo as Email Attatchement Action
         let sendEmailAction = UIAlertAction(title: "Share by Email", style: .default) { _ in
             
             let mailComposeVC = MFMailComposeViewController()
@@ -250,15 +265,23 @@ extension GalleryViewController: FlickrPhotoSplitViewDelegate, FlickrPhotoSplitV
             self.present(mailComposeVC, animated: true, completion: nil)
         }
         
+        
+        //Cancel Action
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
+        
+        //Add Actions
         actionSheet.addAction(saveAction)
         actionSheet.addAction(openInSafariAction)
+        
         if MFMailComposeViewController.canSendMail() {
             actionSheet.addAction(sendEmailAction)
         }
+        
         actionSheet.addAction(cancelAction)
         
+        
+        //Present Action Sheet
         present(actionSheet, animated: true, completion: nil)
     }
     
@@ -291,7 +314,6 @@ extension GalleryViewController: FlickrPhotoSplitViewDelegate, FlickrPhotoSplitV
 //MARK:
 //MARK: Search Handling
 //----------------------------------------------------------------------------------------
-
 extension GalleryViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -308,7 +330,7 @@ extension GalleryViewController: UISearchBarDelegate {
         
         if let text = searchBar.text {
             
-            //Only perform a search operation is the user stop typing for at least 0.5 seconds
+            //Only perform a search operation if the user stop typing for at least 0.5 seconds
             NSObject.cancelPreviousPerformRequests(withTarget: self)
             
             //Remove whitespaces from Search String
@@ -337,7 +359,7 @@ extension GalleryViewController: UISearchBarDelegate {
     }
     
     
-    //Add Tap to dismiss keyboard to view
+    //Add Tap to dismiss keyboard
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchBar.setShowsCancelButton(true, animated: true)
         view.addGestureRecognizer(tap)
@@ -348,7 +370,7 @@ extension GalleryViewController: UISearchBarDelegate {
         view.removeGestureRecognizer(tap)
     }
     
-    //Hancel search cancel
+    //Handle search cancel
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         
         isSearching = false
@@ -362,31 +384,38 @@ extension GalleryViewController: UISearchBarDelegate {
         }
     }
     
+    
     //Hide keyboard on return key pressed
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
     }
     
     
-    //MARK:- Handle Search
+    //MARK:- Perform Search
     func handleSearch() {
         
-        pagesLoaded += 1
         viewModel.searchflickrForTags(inString: searchString, onPage: pagesLoaded) { (searchedString, images, error) in
             DispatchQueue.main.async {
+                
+                //If there are alredy photos loaded
                 if let current = self.flickrPhotos, loaded = images {
                     
+                    //If the search string hasnt changed, add new photos to current photos
                     if self.searchString == searchedString {
                         self.flickrPhotos =  current + loaded
+                    
+                    //Else, set loaded photos
                     } else {
                         self.flickrPhotos = images
                     }
-                    
+                
+                //Else, set loaded photos
                 } else {
                     self.flickrPhotos = images
                 }
             }
         }
+        pagesLoaded += 1
     }
     
     

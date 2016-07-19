@@ -146,11 +146,6 @@ public class FlickrPhotoSplitView: BaseView {
         delegate.flickrPhotoSplitView(willDisplayLastItemFromflickrPhotos: flickrPhotos)
     }
     
-    func collectionViewDidSelectItem(at index: Int) {
-        tableView?.scrollToItemSelectedInCollectionView(at: index)
-        splitView.scrollToItem(at: IndexPath(item: 0, section: 0), at: [], animated: true)
-    }
-    
     func showOptionsForFlickrPhoto(flickrPhoto: FlickrPhoto, withImageFile image: UIImage) {
         delegate.showOptionsForFlickrPhoto(flickrPhoto: flickrPhoto, withImageFile: image)
     }

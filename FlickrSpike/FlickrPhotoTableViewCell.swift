@@ -25,6 +25,8 @@ class FlickrPhotoTableViewCell: BaseTableCell {
         }
     }
     
+    var indexPath: IndexPath?
+    
     //----------------------------------------------------------------------------------------
     //MARK:
     //MARK: Parent Table View
@@ -74,7 +76,7 @@ class FlickrPhotoTableViewCell: BaseTableCell {
     //MARK: Method for Image Options Action Sheet
     //----------------------------------------------------------------------------------------
     func showImageOptions() {
-        tableView?.showImagesOptions(forFlickrPhoto: flickrPhoto!, andImage: photoView.image!)
+        tableView?.showImagesOptions(forFlickrPhoto: flickrPhoto!, atIndexPath: indexPath!)
     }
     
 }

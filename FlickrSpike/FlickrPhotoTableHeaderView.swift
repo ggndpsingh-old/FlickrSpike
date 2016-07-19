@@ -23,6 +23,14 @@ class FlickrPhotoTableHeaderView: BaseView {
         }
     }
     
+    var indexPath: IndexPath?
+    
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: Parent Table View
+    //----------------------------------------------------------------------------------------
+    var tableView: FlickrPhotoTableView?
+    
     
     //----------------------------------------------------------------------------------------
     //MARK:
@@ -36,10 +44,11 @@ class FlickrPhotoTableHeaderView: BaseView {
         return label
     }()
     
-    let optionsButton: UIButton = {
+    lazy var optionsButton: UIButton = {
         let button = UIButton(frame: CGRect.zero)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(Images.OptionsButtonImage, for: [])
+        button.addTarget(self, action: #selector(showImageOptions), for: .touchUpInside)
         return button
     }()
     
@@ -79,6 +88,15 @@ class FlickrPhotoTableHeaderView: BaseView {
         optionsButton.heightAnchor.constraint   (equalToConstant: 50)                   .isActive = true
         optionsButton.widthAnchor.constraint    (equalToConstant: 50)                   .isActive = true
         optionsButton.centerYAnchor.constraint  (equalTo: centerYAnchor)                .isActive = true
+    }
+    
+    
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: Method for Image Options Action Sheet
+    //----------------------------------------------------------------------------------------
+    func showImageOptions() {
+        tableView?.showImagesOptions(forFlickrPhoto: flickrPhoto!, atIndexPath: indexPath!)
     }
     
 }

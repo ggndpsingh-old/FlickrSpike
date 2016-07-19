@@ -90,6 +90,8 @@ public class FlickrPhotoTableView: UITableView, UITableViewDataSource, UITableVi
         
         let view = FlickrPhotoTableHeaderView()
         view.flickrPhoto = flickrPhotos?[section]
+        view.tableView = self
+        view.indexPath = IndexPath(row: 0, section: section)
         return view
     }
     
@@ -118,6 +120,7 @@ public class FlickrPhotoTableView: UITableView, UITableViewDataSource, UITableVi
         if indexPath.row == 0 {
             let cell = dequeueReusableCell(withIdentifier: "flickrPhotoTableViewCell") as! FlickrPhotoTableViewCell
             cell.tableView = self
+            cell.indexPath = indexPath
             cell.flickrPhoto = flickrPhotos![indexPath.section]
             
             return cell
@@ -125,6 +128,7 @@ public class FlickrPhotoTableView: UITableView, UITableViewDataSource, UITableVi
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "flickrPhotoDataCell") as! FlickrPhotoDataCell
             cell.flickrPhoto = flickrPhotos![indexPath.section]
+            
             return cell
         }
         
@@ -146,16 +150,12 @@ public class FlickrPhotoTableView: UITableView, UITableViewDataSource, UITableVi
     //MARK:
     //MARK: Custom Methods
     //----------------------------------------------------------------------------------------
-    func showImagesOptions(forFlickrPhoto flickrPhoto: FlickrPhoto, andImage image: UIImage) {
-        splitView.showOptionsForFlickrPhoto(flickrPhoto: flickrPhoto, withImageFile: image)
-    }
-    
-    func scrollToItemSelectedInCollectionView(at index: Int) {
-        let delayTime = DispatchTime.now() + 0.1
-        DispatchQueue.main.after(when: delayTime) {
-            
-            let indexPath = IndexPath(row: 0, section: index)
-            self.scrollToRow(at: indexPath, at: .top, animated: true)
+    func showImagesOptions(forFlickrPhoto flickrPhoto: FlickrPhoto, atIndexPath indexPath: IndexPath) {
+        
+        if let PhotoCell = cellForRow(at: indexPath) as? FlickrPhotoTableViewCell {
+            if let image = PhotoCell.photoView.image {
+                splitView.showOptionsForFlickrPhoto(flickrPhoto: flickrPhoto, withImageFile: image)
+            }
         }
     }
     
