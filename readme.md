@@ -31,8 +31,17 @@ Typically the project structure has the followings:
 The communication between view-models and view-controllers I have chosen traditional ***delegate*** based approach to achieve the communication between view-models and view-controllers becasue of strict requirement of the project to not to use any third=party libraries.
 
 
+### 2.  Backend Infrastructure
 
-### 2. User Interface Design
+The backend of the project is Flickr API. The public feed of the API is accessed with an API Key, to fetch and search photos.
+
+The heart of this app is in the Image Downloader extention to the UIImageView which downlods Photos from Flickr asynchronously. As Images are downloaded, they are added to the Image Cache, to avoid downloading an Image evrytime a reusable cell comes into view.
+
+I used a tags system to make sure images dont flickr/change when scrolling the views. Each UIImage View is assigned a Tag from their IndexPath and each image load request is given a Tag of their own. If both tags match, only then the photo is assigned to a UIImageView.
+
+
+
+### 3. User Interface Design
 The app is supported in potrait mode only for all device families - iPhone SE, 5, 5s, 6, 6s, 6Plus, 6Plus s, iPad, iPad mini, iPad Pro. The user interface is adaptive accross all these devices.
 
 
@@ -41,9 +50,61 @@ This is the main and only View Controller in the app. This includes a Split View
 
 * The Split View has two main components, a Menu Bar and a Collection View Controller.
 * The Collection View Controller has two cells, one of which contains a Table View Controller and the other contains a Collection View Controller.
+* The Data Source is shared between both views to keep them always in sync.
     * The Menu bar is used as a Custom Tab Bar to swich between the two cells of the Split View, to access either Table or Collection View.
-    * The Table View shows the Photos loaded from Flickr in full screen wide Square Views.
-    * The Table View also has a header cell that shows the Username of the Published of each Photo.
-    * The Table View has a Data Cell which displayes the Meta Data for the each Photo.
+
+    * Table View -
+        * The Table View shows the Photos loaded from Flickr in full screen wide Square Views.
+        * The Table View also has a header cell that shows the Username of the Published of each Photo.
+        * The Table View has a Data Cell which displayes the Meta Data for the each Photo.
+        * The Photo View in the Table View has a Long Press Gesture Recogniser which displayes an Action Sheet for that Photo which has options to Save Photo, Open Photo in Safari and Share Photo by Email.
+        * The same Action Sheet can also be accessed from the Options button the the Header View of each Photo.
+    
+    * Collection View -
+        * The Collection View displays a grid of Square Photos, 3 photos horizontally.
+        * To Display a Photo full-screen from the Collection view, a full screen view has been added which opens in a temporary UIWindow, when a Photo is tapped.
+        * The Full Screen View contains all the information about a Photo as a Table View section.
+
+* The Table View & Collection View share information among each other and also with the Split View and the View Controller Displaying them, via ***delegate*** method to perform some tasks.
+* A Search Bar has been added to the Navigation Bar. A user can perform search for one or more tags. The search functionality considers all tags added to the search separated by space.
+* The app constantly loads more Photos the user scrolls to the end of either Table or Collection View. The number of photos loaded each time can be set in the Constants file and is set to 20 by default.
+* The app is localization ready. All the strings are stored in a struct and can be easilty translated to another language.
+
+
+***
+### Level of effort and time estimates
+This app was built on full-time basis for three days. Following is the approximate break down of time spent in man-hours for various aspects of the design and developement process.
+
+| Aspect                          |Approximate Time|
+| ------------------------------------ |:---------:|
+| Backend setup for the API            | 0.5 hours |
+| App arechitecture planning           | 1.0 hour  |
+| Coding for the core service layer    | 1.0 hour  |
+| Coding for the view models           | 1.0 hour  |
+| Coding for the view controllers      | 8.0 hours |
+| User interface design                | 3.0 hours |
+| Graphic design in Sketch             | 1.0 hour  |
+| Code commenting and documentation    | 2.5 hour  |
+| ReadMe.md documentation on Github    | 2.0 hours |
+| **Total**                            | **20 hours**  |
+
+
+
+***
+### Issues & Limitations
+There are a few issues with the app that can be improved.
+* The delegate based communication between view-models and view-controllers can be improved with better solutions(eg. ReactiveCocoa).
+* Some proper Flickr functionalities can be added, like updating Views count on Flickr.
+
+
+
+
+
+
+
+
+
+
+
 
 

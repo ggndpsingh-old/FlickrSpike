@@ -18,6 +18,10 @@ struct Strings {
     static let ShareByEmail = NSLocalizedString("Share by Email", comment: "Title for  Share Photo by Email button")
     static let Views        = NSLocalizedString("Views", comment: "To tell the user, how many views a photo has reveived")
     static let Tags         = NSLocalizedString("Tags", comment: "Header to tell user that following are the tags for a photo")
+    static let Taken        = NSLocalizedString("Taken", comment: "Title for label that shows when a Photo was taken.")
+    static let Published    = NSLocalizedString("Published", comment: "Title for label that shows when a Photo was published.")
+    
+    
     
     static func ShowingAllPhotos(withCount count: Int, forTags tags: String) -> String {
         return String(format: NSLocalizedString("Showing all %i Photos for %@", comment: "Gallery detail for photos being shown for performed search e.g Showing all photos for cats"), count, tags)

@@ -66,7 +66,15 @@ class FullScreenView: UIScrollView {
         return label
     }()
     
-    let timeLabel: UILabel = {
+    let takenLabel: UILabel = {
+        let label = UILabel(frame: CGRect.zero)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 11)
+        label.textColor = UIColor.lightGray()
+        return label
+    }()
+    
+    let publishedLabel: UILabel = {
         let label = UILabel(frame: CGRect.zero)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 11)
@@ -174,13 +182,20 @@ class FullScreenView: UIScrollView {
         tagsLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16).isActive = true
         tagsLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16).isActive = true
         
-        //Time Label
-        contentView.addSubview(timeLabel)
-        timeLabel.topAnchor.constraint(equalTo: tagsLabel.bottomAnchor, constant: 20).isActive = true
-        timeLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16).isActive = true
-        timeLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16).isActive = true
-        timeLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        timeLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20).isActive = true
+        //Taken Label
+        contentView.addSubview(takenLabel)
+        takenLabel.topAnchor.constraint(equalTo: tagsLabel.bottomAnchor, constant: 20).isActive = true
+        takenLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16).isActive = true
+        takenLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16).isActive = true
+        takenLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        
+        //Published Label
+        contentView.addSubview(publishedLabel)
+        publishedLabel.topAnchor.constraint(equalTo: takenLabel.bottomAnchor, constant: 0).isActive = true
+        publishedLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16).isActive = true
+        publishedLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16).isActive = true
+        publishedLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        publishedLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20).isActive = true
         
         
         //Setup Photo Window
@@ -348,8 +363,12 @@ class FullScreenView: UIScrollView {
             tagsLabel.attributedText = createAttributdString(withAddedBoldString: "\(Strings.Tags):", toString: separated, withFontSize: 13)
         }
         
+        if let date = photo.taken {
+            takenLabel.text = "\(Strings.Taken): \(date.longFormat())"
+        }
+        
         if let date = photo.published {
-            timeLabel.text = date.longFormat()
+            publishedLabel.text = "\(Strings.Published): \(date.longFormat())"
         }
         
         

@@ -77,11 +77,11 @@ class FlickrPhotoDataCell: BaseTableCell {
         }
         
         if let date = flickrPhoto?.taken {
-            takenLabel.text = "Taken: \(date.longFormat())"
+            takenLabel.text = "\(Strings.Taken): \(date.longFormat())"
         }
         
         if let date = flickrPhoto?.published {
-            publishedLabel.text = "Published: \(date.longFormat())"
+            publishedLabel.text = "\(Strings.Published): \(date.longFormat())"
         }
         
         
@@ -94,7 +94,6 @@ class FlickrPhotoDataCell: BaseTableCell {
         
         addSubview(tagsLabel)
         tagsLabel.topAnchor.constraint      (equalTo: viewsLabel.bottomAnchor, constant: 5) .isActive = true
-//        tagsLabel.bottomAnchor.constraint   (equalTo: bottomAnchor, constant: -60)          .isActive = true
         tagsLabel.leftAnchor.constraint     (equalTo: leftAnchor, constant: 16)             .isActive = true
         tagsLabel.rightAnchor.constraint    (equalTo: rightAnchor, constant: -16)           .isActive = true
         
