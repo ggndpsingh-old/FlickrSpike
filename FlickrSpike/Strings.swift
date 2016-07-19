@@ -21,7 +21,14 @@ struct Strings {
     static let Taken        = NSLocalizedString("Taken", comment: "Title for label that shows when a Photo was taken.")
     static let Published    = NSLocalizedString("Published", comment: "Title for label that shows when a Photo was published.")
     
+    static let PhotoSavedSuccessfuly = NSLocalizedString("Photo Saved", comment: "Message shown when a user successfuly saves a photo to the Photo Gallery")
+    static let PhotoSaveFailed = NSLocalizedString("Could not save photo", comment: "Messagee shown when a user tries to save a photo to Photo Gallery but it fails")
     
+    static let EmailSent = NSLocalizedString("Email Sent", comment: "Message shown when user successfully sends an email with a photo attatchment.")
+    
+    static let EmailCancelled = NSLocalizedString("Email Cancelled", comment: "Message shown when user cancels the sending of email with a photo attathments.")
+    
+    static let EmailFailed = NSLocalizedString("Could not send Email", comment: "Message show when an email with a photo attatchment failes to be sent.")
     
     static func ShowingAllPhotos(withCount count: Int, forTags tags: String) -> String {
         return String(format: NSLocalizedString("Showing all %i Photos for %@", comment: "Gallery detail for photos being shown for performed search e.g Showing all photos for cats"), count, tags)

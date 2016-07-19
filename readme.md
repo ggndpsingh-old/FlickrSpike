@@ -55,19 +55,20 @@ This is the main and only View Controller in the app. This includes a Split View
 
     * Table View -
         * The Table View shows the Photos loaded from Flickr in full screen wide Square Views.
-        * The Table View also has a header cell that shows the Username of the Published of each Photo.
+        * The Table View also has a header view that shows the Username of the publisher of each Photo.
         * The Table View has a Data Cell which displayes the Meta Data for the each Photo.
         * The Photo View in the Table View has a Long Press Gesture Recogniser which displayes an Action Sheet for that Photo which has options to Save Photo, Open Photo in Safari and Share Photo by Email.
-        * The same Action Sheet can also be accessed from the Options button the the Header View of each Photo.
+        * The same Action Sheet can also be accessed from the Options button in the the Header View of each Photo.
     
     * Collection View -
         * The Collection View displays a grid of Square Photos, 3 photos horizontally.
         * To Display a Photo full-screen from the Collection view, a full screen view has been added which opens in a temporary UIWindow, when a Photo is tapped.
         * The Full Screen View contains all the information about a Photo as a Table View section.
+        * The Full Screen View can dismissed by dragging it downwards and it gives a disappearing effect when dragged.
 
 * The Table View & Collection View share information among each other and also with the Split View and the View Controller Displaying them, via ***delegate*** method to perform some tasks.
 * A Search Bar has been added to the Navigation Bar. A user can perform search for one or more tags. The search functionality considers all tags added to the search separated by space.
-* The app constantly loads more Photos the user scrolls to the end of either Table or Collection View. The number of photos loaded each time can be set in the Constants file and is set to 20 by default.
+* The app constantly loads more Photos as the user scrolls to the end of either Table or Collection View. The number of photos loaded each time can be set in the Constants file and is set to 20 by default.
 * The app is localization ready. All the strings are stored in a struct and can be easilty translated to another language.
 
 

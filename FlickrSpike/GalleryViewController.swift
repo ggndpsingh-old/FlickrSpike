@@ -145,18 +145,21 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailC
     
     func setupViews() {
         
+        //Details label
         view.addSubview(detailsLabel)
         detailsLabel.leftAnchor.constraint     (equalTo: view.leftAnchor)  .isActive = true
         detailsLabel.rightAnchor.constraint    (equalTo: view.rightAnchor) .isActive = true
         detailsLabel.topAnchor.constraint      (equalTo: view.topAnchor)   .isActive = true
         detailsLabel.heightAnchor.constraint   (equalToConstant: 20)       .isActive = true
         
+        //spinner
         view.addSubview(spinner)
         spinner.widthAnchor.constraint(equalToConstant: 20).isActive = true
         spinner.heightAnchor.constraint(equalToConstant: 20).isActive = true
         spinner.centerXAnchor.constraint(equalTo: detailsLabel.centerXAnchor).isActive = true
         spinner.centerYAnchor.constraint(equalTo: detailsLabel.centerYAnchor).isActive = true
         
+        //Split View
         view.addSubview(flickrPhotoSplitView)
         flickrPhotoSplitView.leftAnchor.constraint     (equalTo: view.leftAnchor)  .isActive = true
         flickrPhotoSplitView.rightAnchor.constraint    (equalTo: view.rightAnchor) .isActive = true
@@ -174,6 +177,7 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailC
         if Reachability.isConnectedToNetwork() {
         
             viewModel.fetchRecentImagesFromFlickr(atPage: pagesLoaded, sortedBy: FlickrAPI.Sort.DateTaken) { (loadedPhotos, error) in
+                
                 DispatchQueue.main.async {
                     
                     //If there are alredy photos loaded, add new photos to current photos
@@ -184,6 +188,7 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailC
                         self.flickrPhotos = loadedPhotos
                     }
                 }
+                
             }
             pagesLoaded += 1
         } else {
@@ -319,9 +324,10 @@ extension GalleryViewController: FlickrPhotoSplitViewDelegate, FlickrPhotoSplitV
      */
     func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Void>) {
         if error == nil {
-            print("Success")
+            Views.MessageView.show(withMessage: Strings.PhotoSavedSuccessfuly, valid: true, completion: nil)
+            
         } else {
-            print("Failure")
+            Views.MessageView.show(withMessage: Strings.PhotoSaveFailed, valid: false, completion: nil)
         }
     }
     
@@ -330,7 +336,22 @@ extension GalleryViewController: FlickrPhotoSplitViewDelegate, FlickrPhotoSplitV
         Result method for Mail Compose Controller
      */
     @objc(mailComposeController:didFinishWithResult:error:) func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: NSError?) {
+        
         dismiss(animated: true, completion: nil)
+        
+        switch result {
+            
+        case .sent:
+            Views.MessageView.show(withMessage: Strings.EmailSent, valid: true, completion: nil)
+        case .cancelled:
+            Views.MessageView.show(withMessage: Strings.EmailCancelled, valid: false, completion: nil)
+            
+        case .failed:
+            Views.MessageView.show(withMessage: Strings.EmailFailed, valid: false, completion: nil)
+            
+        default:
+            break
+        }
         
     }
 }
