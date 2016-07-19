@@ -9,7 +9,7 @@
 import UIKit
 import MessageUI
 
-class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate {
+class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate {
 
     
     //----------------------------------------------------------------------------------------
@@ -267,10 +267,30 @@ extension GalleryViewController: FlickrPhotoSplitViewDelegate, FlickrPhotoSplitV
     /*
         Displays the Options Action Sheet for a Photo
      */
-    func showOptionsForFlickrPhoto(flickrPhoto: FlickrPhoto, withImageFile image: UIImage) {
+    func showOptionsForFlickrPhoto(flickrPhoto: FlickrPhoto, withImageFile image: UIImage, atIndexPath indexPath: IndexPath) {
         
         //Create Action Sheet Controller
         let actionSheet = UIAlertController(title: Strings.PhotoOptions, message: nil, preferredStyle: .actionSheet)
+        
+        //Setup Popup Presentation Controller Source for iPad
+        actionSheet.popoverPresentationController?.permittedArrowDirections = .up
+        
+        //Get Table View from Split View
+        let tableView = flickrPhotoSplitView.tableView!
+        
+        //Get Rect for Header of selected photo
+        let rectForHeader = tableView.rectForHeader(inSection: indexPath.section)
+        
+        //Get Rect for Header in current view
+        let rectInView = tableView.convert(rectForHeader, to: self.view)
+        
+        //Calculate Rect for the options button
+        let buttonRect = CGRect(x: MainScreen.Size.width - 60, y: rectInView.origin.y, width: 50, height: 50)
+        
+        //Set sources for the popup presentation controller
+        actionSheet.popoverPresentationController?.sourceView = self.view
+        actionSheet.popoverPresentationController?.sourceRect = buttonRect
+        
         
         
         //Save Photo To Gallery Action

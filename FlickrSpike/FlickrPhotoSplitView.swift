@@ -17,7 +17,7 @@ public protocol FlickrPhotoSplitViewDelegate: class {
     
     func flickrPhotoSplitView(willDisplayLastItemFromflickrPhotos flickrPhotos: [FlickrPhoto]?)
     func resetflickrPhotos(in flickrPhotoSplitView: FlickrPhotoSplitView)
-    func showOptionsForFlickrPhoto(flickrPhoto: FlickrPhoto, withImageFile image: UIImage)
+    func showOptionsForFlickrPhoto(flickrPhoto: FlickrPhoto, withImageFile image: UIImage, atIndexPath indexPath: IndexPath)
     
 }
 
@@ -165,8 +165,8 @@ public class FlickrPhotoSplitView: BaseView {
         delegate.flickrPhotoSplitView(willDisplayLastItemFromflickrPhotos: flickrPhotos)
     }
     
-    func showOptionsForFlickrPhoto(flickrPhoto: FlickrPhoto, withImageFile image: UIImage) {
-        delegate.showOptionsForFlickrPhoto(flickrPhoto: flickrPhoto, withImageFile: image)
+    func showOptionsForFlickrPhoto(flickrPhoto: FlickrPhoto, withImageFile image: UIImage, atIndexPath indexPath: IndexPath) {
+        delegate.showOptionsForFlickrPhoto(flickrPhoto: flickrPhoto, withImageFile: image, atIndexPath: indexPath)
     }
     
     

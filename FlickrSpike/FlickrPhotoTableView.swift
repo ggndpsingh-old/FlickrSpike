@@ -167,7 +167,8 @@ public class FlickrPhotoTableView: UITableView, UITableViewDataSource, UITableVi
         
         if let PhotoCell = cellForRow(at: indexPath) as? FlickrPhotoTableViewCell {
             if let image = PhotoCell.photoView.image {
-                splitView.showOptionsForFlickrPhoto(flickrPhoto: flickrPhoto, withImageFile: image)
+                
+                splitView.showOptionsForFlickrPhoto(flickrPhoto: flickrPhoto, withImageFile: image, atIndexPath: indexPath)
             }
         }
     }

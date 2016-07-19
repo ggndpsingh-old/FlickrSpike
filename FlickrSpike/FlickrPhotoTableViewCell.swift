@@ -47,7 +47,7 @@ class FlickrPhotoTableViewCell: BaseTableCell {
     //----------------------------------------------------------------------------------------
     lazy var longTap: UILongPressGestureRecognizer = {
         let lt = UILongPressGestureRecognizer()
-        lt.addTarget(self, action: #selector(showImageOptions))
+        lt.addTarget(self, action: #selector(showImageOptions(recognizer:)))
         return lt
     }()
     
@@ -82,8 +82,23 @@ class FlickrPhotoTableViewCell: BaseTableCell {
     //MARK:
     //MARK: Method for Image Options Action Sheet
     //----------------------------------------------------------------------------------------
-    func showImageOptions() {
-        tableView?.showImagesOptions(forFlickrPhoto: flickrPhoto!, atIndexPath: indexPath!)
+    func showImageOptions(recognizer: UILongPressGestureRecognizer) {
+        switch recognizer.state {
+        case .began:
+            tableView?.showImagesOptions(forFlickrPhoto: flickrPhoto!, atIndexPath: indexPath!)
+        case .changed:
+            break
+        case .ended:
+            break
+            
+        case .cancelled:
+            break
+        case .failed:
+            break
+        default:
+            break
+        }
+        
     }
     
 }
