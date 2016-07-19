@@ -22,11 +22,11 @@ An Image Gallery that uses Flickr public image feed as its data source.
 This app has deigned using Model-View-ViewModel (MVVM) pattern to provide a separation of concerns between them. It is also useful for maintainability and it also avoids the Massive-View controllers problem.
 
 Typically the project structure has the followings:  
-1. ***Service*** – The core of the app that talks to the backend side via network calls
-2. ***Model*** – The data model to represent an entity. eg. FlickrPhoto
-3. ***View*** – The UI Elements which are container within a View Controler and interact with UI. eg. Table View Cells
-4. ***View-Model*** – The model representing the data necessary for the view to display itself; but it’s also responsible for gathering, interpreting, and transforming that data by communicating with services layer  
-5.	***View-Controller*** – The controllers that directly interact with the UI and manage the UI state. The code for Views and View-Controllers have similar goals and they are commonly categorised into one category  
+* ***Service*** – The core of the app that talks to the backend side via network calls
+* ***Model*** – The data model to represent an entity. eg. FlickrPhoto
+* ***View*** – The UI Elements which are container within a View Controler and interact with UI. eg. Table View Cells
+* ***View-Model*** – The model representing the data necessary for the view to display itself; but it’s also responsible for gathering, interpreting, and transforming that data by communicating with services layer  
+*	***View-Controller*** – The controllers that directly interact with the UI and manage the UI state. The code for Views and View-Controllers have similar goals and they are commonly categorised into one category  
 
 The communication between view-models and view-controllers I have chosen traditional ***delegate*** based approach to achieve the communication between view-models and view-controllers becasue of strict requirement of the project to not to use any third=party libraries.
 
