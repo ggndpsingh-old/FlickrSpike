@@ -9,7 +9,7 @@
 import UIKit
 import MessageUI
 
-class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate {
+class GalleryViewController: UIViewController, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate {
 
     
     //----------------------------------------------------------------------------------------
@@ -23,8 +23,14 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailC
             
             if let count = flickrPhotos?.count {
                 
+                if count == 0 {
+                    detailsLabel.text = Strings.NoPhotosFound
+                    return
+                }
+                
                 if isSearching {
                     detailsLabel.text = Strings.ShowingAllPhotos(withCount: count, forTags: searchString)
+                    
                 } else {
                     detailsLabel.text = Strings.ShowingAllRecentPhotos(withCount: count)
                 }
@@ -168,29 +174,42 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailC
     }
     
     
+    
+    
+}
+
+
+//----------------------------------------------------------------------------------------
+//MARK:
+//MARK: Delegate methods for View Model
+//----------------------------------------------------------------------------------------
+extension GalleryViewController: GalleryViewModelDelegate {
+    
     //----------------------------------------------------------------------------------------
-    //MARK:
     //MARK: Fetch Photos from Flickr
     //----------------------------------------------------------------------------------------
     func fetchRecentPhotosFromFlickr() {
         
         if Reachability.isConnectedToNetwork() {
-        
-            viewModel.fetchRecentImagesFromFlickr(atPage: pagesLoaded, sortedBy: FlickrAPI.Sort.DateTaken) { (loadedPhotos, error) in
-                
-                DispatchQueue.main.async {
-                    
-                    //If there are alredy photos loaded, add new photos to current photos
-                    if let current = self.flickrPhotos, loaded = loadedPhotos {
-                        self.flickrPhotos = current + loaded
-                        
-                    } else { //Set loaded photo
-                        self.flickrPhotos = loadedPhotos
-                    }
-                }
-                
-            }
+            
+            viewModel.fetchRecentImagesFromFlickr(atPage: pagesLoaded, sortedBy: FlickrAPI.Sort.DateTaken)
             pagesLoaded += 1
+            
+        } else {
+            showErrorMessage(forCode: Error.NoInternet.rawValue, completionHandler: nil)
+        }
+    }
+    
+    //----------------------------------------------------------------------------------------
+    //MARK: Search Photos for Tags
+    //----------------------------------------------------------------------------------------
+    func handleSearch() {
+        
+        if Reachability.isConnectedToNetwork() {
+            
+            viewModel.searchflickrForTags(inString: searchString, onPage: pagesLoaded, sortedBy: FlickrAPI.Sort.DateTaken)
+            pagesLoaded += 1
+            
         } else {
             showErrorMessage(forCode: Error.NoInternet.rawValue, completionHandler: nil)
         }
@@ -199,30 +218,64 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailC
     
     
     //----------------------------------------------------------------------------------------
-    //MARK:
-    //MARK: Delegate methods for View Model
+    //MARK: Delegate Methods
     //----------------------------------------------------------------------------------------
+    //Show Loading Spinner
     func showProcessing() {
         detailsLabel.text = ""
         spinner.startAnimating()
     }
     
-    
+    //Hide Loading Spinner
     func hideProcessing() {
         DispatchQueue.main.async {
             self.spinner.stopAnimating()
         }
     }
     
+    //If fetch or search failes, show an error message
     func fetchFailed(withError error: Int?) {
         DispatchQueue.main.async {
             showErrorMessage(forCode: error!, completionHandler: nil)
         }
     }
     
-    func searchFailed(withError error: Int?) {
+    
+    //Successfully fetched Recent Photos from Flickr
+    func fetchCompleted(withPhotos photos: [FlickrPhoto]) {
         DispatchQueue.main.async {
-            showErrorMessage(forCode: error!, completionHandler: nil)
+            
+            //If there are alredy photos loaded, add new photos to current photos
+            if let current = self.flickrPhotos {
+                self.flickrPhotos = current + photos
+                
+            } else { //Set loaded photo
+                self.flickrPhotos = photos
+            }
+        }
+    }
+    
+    
+    //Successfully fetched photos for searched tags
+    func searchCompleted(withPhotos photos: [FlickrPhoto], forSearchString searchString: String) {
+        DispatchQueue.main.async {
+            
+            //If there are alredy photos loaded
+            if let current = self.flickrPhotos {
+                
+                //If the search string hasnt changed, add new photos to current photos
+                if self.searchString == searchString {
+                    self.flickrPhotos =  current + photos
+                    
+                    //Else, set loaded photos
+                } else {
+                    self.flickrPhotos = photos
+                }
+                
+                //Else, set loaded photos
+            } else {
+                self.flickrPhotos = photos
+            }
         }
     }
 }
@@ -457,39 +510,6 @@ extension GalleryViewController: UISearchBarDelegate {
     //Hide keyboard on return key pressed
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
-    }
-    
-    
-    //MARK:- Perform Search
-    func handleSearch() {
-        
-        if Reachability.isConnectedToNetwork() {
-            viewModel.searchflickrForTags(inString: searchString, onPage: pagesLoaded, sortedBy: FlickrAPI.Sort.DateTaken) { (searchedString, images, error) in
-                DispatchQueue.main.async {
-                    
-                    //If there are alredy photos loaded
-                    if let current = self.flickrPhotos, loaded = images {
-                        
-                        //If the search string hasnt changed, add new photos to current photos
-                        if self.searchString == searchedString {
-                            self.flickrPhotos =  current + loaded
-                        
-                        //Else, set loaded photos
-                        } else {
-                            self.flickrPhotos = images
-                        }
-                    
-                    //Else, set loaded photos
-                    } else {
-                        self.flickrPhotos = images
-                    }
-                }
-            }
-            pagesLoaded += 1
-            
-        } else {
-            showErrorMessage(forCode: Error.NoInternet.rawValue, completionHandler: nil)
-        }
     }
     
     

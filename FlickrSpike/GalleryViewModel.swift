@@ -14,7 +14,9 @@ public protocol GalleryViewModelDelegate: class {
     func hideProcessing()
     
     func fetchFailed(withError error: Int?)
-    func searchFailed(withError error: Int?)
+    
+    func fetchCompleted(withPhotos photos: [FlickrPhoto])
+    func searchCompleted(withPhotos photos: [FlickrPhoto], forSearchString searchString: String)
 
 }
 
@@ -40,12 +42,10 @@ class GalleryViewModel {
     //MARK:
     //MARK: Fetch Recent Images from Flickr
     //----------------------------------------------------------------------------------------
-    func fetchRecentImagesFromFlickr(atPage page:  Int, sortedBy sort: FlickrAPI.Sort, completionHandler: (images: [FlickrPhoto]?, error: NSError?) -> ()) {
+    func fetchRecentImagesFromFlickr(atPage page:  Int, sortedBy sort: FlickrAPI.Sort) {
         
         //Show loading spinner on View Controller
         delegate?.showProcessing()
-        
-        var images = [FlickrPhoto]()
         
         //Construct fetch Url
         let urlString = "\(FlickrAPI.RecentBaseUrl)&per_page=\(FlickrAPI.ImagesPerPage)&page=\(page)&\(FlickrAPI.Arguments)&safe_search=\(FlickrAPI.SafeSearch.rawValue)&sort=\(sort.rawValue)"
@@ -69,57 +69,22 @@ class GalleryViewModel {
             }
             
             //Extract Photos from Result
-            if let result = String(data: data!, encoding: String.Encoding.utf8) {
-                if let list = self.convertJsonStringToDictionary(string: result) {
-                    if let photosList = list["photos"] as? NSDictionary {
-                        if let photos = photosList["photo"] as? NSArray {
-                            for photo in photos {
-                                let flickrPhoto = FlickrPhoto(withFlickrPhoto: photo as! NSDictionary)
-                                
-                                if let url = flickrPhoto.imageUrl {
-                                    if imageCache.object(forKey: url) == nil {
-                                        images.append(flickrPhoto)
-                                    }
-                                }
-                            }
-                            self.delegate?.hideProcessing()
-                            completionHandler(images: images, error: nil)
-                            
-                        } else {
-                            
-                            self.delegate?.fetchFailed(withError: Error.FailedToLaodPhotos.rawValue)
-                            self.delegate?.hideProcessing()
-                        }
-                    } else {
-                        
-                        self.delegate?.fetchFailed(withError: Error.FailedToLaodPhotos.rawValue)
-                        self.delegate?.hideProcessing()
-                    }
-                } else {
-                    
-                    self.delegate?.fetchFailed(withError: Error.FailedToLaodPhotos.rawValue)
-                    self.delegate?.hideProcessing()
-                }
-            } else {
-                
-                self.delegate?.fetchFailed(withError: Error.FailedToLaodPhotos.rawValue)
-                self.delegate?.hideProcessing()
+            self.extractPhotos(fromData: data!) { photos in
+                self.delegate?.fetchCompleted(withPhotos: photos)
             }
+            
         }
     }
-    
     
     
     //----------------------------------------------------------------------------------------
     //MARK:
     //MARK: Search Images from Flickr
     //----------------------------------------------------------------------------------------
-    func searchflickrForTags(inString string: String, onPage page: Int, sortedBy sort: FlickrAPI.Sort, completionHandler: (searchString: String, images: [FlickrPhoto]?, error: NSError?) -> ()) {
+    func searchflickrForTags(inString string: String, onPage page: Int, sortedBy sort: FlickrAPI.Sort) {
         
         //Show loading spinner on View Controller
         delegate?.showProcessing()
-        
-        var images = [FlickrPhoto]()
         
         //Create a Comma Separted string
         let tags = string.components(separatedBy: .whitespaces).joined(separator: ",").lowercased()
@@ -143,41 +108,72 @@ class GalleryViewModel {
             }
             
             //Extract Photos from Result
-            if let result = String(data: data!, encoding: String.Encoding.utf8) {
-                if let list = self.convertJsonStringToDictionary(string: result) {
-                    if let photosList = list["photos"] as? NSDictionary {
-                        if let photos = photosList["photo"] as? NSArray {
-                            for photo in photos {
-                                let flickrPhoto = FlickrPhoto(withFlickrPhoto: photo as! NSDictionary)
-                                if let url = flickrPhoto.imageUrl {
-                                    if imageCache.object(forKey: url) == nil {
-                                        images.append(flickrPhoto)
-                                    }
+            self.extractPhotos(fromData: data!) { photos in
+                self.delegate?.searchCompleted(withPhotos: photos, forSearchString: string)
+            }
+        }
+    }
+    
+    
+    
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: Extract Photos from Data
+    //----------------------------------------------------------------------------------------
+    func extractPhotos(fromData data: Data, completionHandler: (images: [FlickrPhoto]) -> ()) {
+        
+        var images = [FlickrPhoto]()
+        
+        //Convert Data to JSON String
+        if let result = String(data: data, encoding: String.Encoding.utf8) {
+            
+            //Convert JSON String to NSDictionary
+            if let list = self.convertJsonStringToDictionary(string: result) {
+                
+                //Extract Photos Dictionary
+                if let photosList = list["photos"] as? NSDictionary {
+                    if let photos = photosList["photo"] as? NSArray {
+                        
+                        for photo in photos {
+                            //Convert each Photo Dictionary to a FlickrPhoto Model
+                            let flickrPhoto = FlickrPhoto(withFlickrPhoto: photo as! NSDictionary)
+                            
+                            /*
+                             Becase flickr gets a lot of photo uploads,
+                             There is a possibility that by the time user reaches page 2 or 3 of the gallery,
+                             some photos on page 1 would have been pushed to a position that would show up on page 2 or 3.
+                             So, we check against Image Cache before adding an Image to the Data Source, to avoid repititions.
+                             */
+                            if let url = flickrPhoto.imageUrl {
+                                if imageCache.object(forKey: url) == nil {
+                                    images.append(flickrPhoto)
                                 }
                             }
-                            self.delegate?.hideProcessing()
-                            completionHandler(searchString: string, images: images, error: nil)
-                        
-                        } else {
-                            
-                            self.delegate?.fetchFailed(withError: Error.FailedToPerformSearch.rawValue)
-                            self.delegate?.hideProcessing()
                         }
+                        self.delegate?.hideProcessing()
+                        completionHandler(images: images)
+                        
+                        
+                        //If Someting goes wrong along the way, send error message
                     } else {
                         
-                        self.delegate?.fetchFailed(withError: Error.FailedToPerformSearch.rawValue)
+                        self.delegate?.fetchFailed(withError: Error.FailedToLaodPhotos.rawValue)
                         self.delegate?.hideProcessing()
                     }
                 } else {
                     
-                    self.delegate?.fetchFailed(withError: Error.FailedToPerformSearch.rawValue)
+                    self.delegate?.fetchFailed(withError: Error.FailedToLaodPhotos.rawValue)
                     self.delegate?.hideProcessing()
                 }
             } else {
                 
-                self.delegate?.fetchFailed(withError: Error.FailedToPerformSearch.rawValue)
+                self.delegate?.fetchFailed(withError: Error.FailedToLaodPhotos.rawValue)
                 self.delegate?.hideProcessing()
             }
+        } else {
+            
+            self.delegate?.fetchFailed(withError: Error.FailedToLaodPhotos.rawValue)
+            self.delegate?.hideProcessing()
         }
     }
     

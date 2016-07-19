@@ -96,6 +96,7 @@ This app was built on full-time basis for three days. Following is the approxima
 There are a few issues with the app that can be improved.
 * The delegate based communication between view-models and view-controllers can be improved with better solutions(eg. ReactiveCocoa).
 * Some proper Flickr functionalities can be added, like updating Views count on Flickr.
+* The Error messages can be more detailed. That can be achieved by adding most, if not all, error codes from Flickr API to the App's Error enum.
 
 
 
