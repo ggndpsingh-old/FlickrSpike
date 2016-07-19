@@ -161,6 +161,8 @@ public class FlickrPhotoSplitView: BaseView {
     //MARK:- Menu Bar Helpers
     //----------------------------------------------------------------------------------------
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let x = scrollView.contentOffset.x
+        menuBar.horizontalBarLeftAnchorConstraint.constant = x / 2
     }
     
     public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {

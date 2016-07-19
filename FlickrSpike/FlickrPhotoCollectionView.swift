@@ -110,14 +110,16 @@ public class FlickrPhotoCollectionView: UICollectionView, UICollectionViewDelega
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-//        splitView.collectionViewDidSelectItem(at: indexPath.item!)
+        /*
+            Calculate the location of the Photo Cell in the window
+            This is used to animate the full screen Photo View
+        */
         let rect = collectionView.layoutAttributesForItem(at: indexPath)?.frame
-        let view = ErrorMessageView()
-        
         let cellFrame = collectionView.convert(rect!, to: collectionView.superview)
         
         if let flickrPhoto = flickrPhotos?[indexPath.item!] {
-                view.show(flickrPhoto: flickrPhoto, withIntialRect: cellFrame)
+            let view = FullScreenView()
+            view.show(flickrPhoto: flickrPhoto, withIntialRect: cellFrame)
         }
     }
     
