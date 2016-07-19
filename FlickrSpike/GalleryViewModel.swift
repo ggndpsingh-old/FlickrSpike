@@ -49,14 +49,14 @@ class GalleryViewModel {
         
         //Construct fetch Url
         let urlString = "\(FlickrAPI.RecentBaseUrl)&per_page=\(FlickrAPI.ImagesPerPage)&page=\(page)&\(FlickrAPI.Arguments)&safe_search=\(FlickrAPI.SafeSearch.rawValue)&sort=\(sort.rawValue)"
-        print(urlString)
         
-        //Create URL Request
-        let request = URLRequest(url: URL(string: urlString)!)
+        //Create URL
+        let url = URL(string: urlString)!
+        
         
         
         //Perform Fetch
-        URLSession.shared().dataTask(with: request) { (data, response, error) in
+        FlickrServices.fetchPhotosFromFlicr(withUrl: url) { (data, response, error) in
             
             //Stop loading if error occurs
             if error != nil {
@@ -105,7 +105,7 @@ class GalleryViewModel {
                 self.delegate?.fetchFailed(withError: Error.FailedToLaodPhotos.rawValue)
                 self.delegate?.hideProcessing()
             }
-        }.resume()
+        }
     }
     
     
@@ -127,11 +127,11 @@ class GalleryViewModel {
         //Construct Search Url
         let urlString = "\(FlickrAPI.SearchBaseUrl)&per_page=\(FlickrAPI.ImagesPerPage)&page=\(page)&tags=\(tags)&\(FlickrAPI.Arguments)&safe_search=\(FlickrAPI.SafeSearch.rawValue)&sort=\(sort.rawValue)"
         
-        //Create URL Request
-        let request = URLRequest(url: URL(string: urlString)!)
+        //Create URL
+        let url = URL(string: urlString)!
         
         //Perform Search
-        URLSession.shared().dataTask(with: request) { (data, response, error) in
+        FlickrServices.fetchPhotosFromFlicr(withUrl: url) { (data, response, error) in
             
             //Stop loading if error occurs
             if error != nil {
@@ -178,7 +178,7 @@ class GalleryViewModel {
                 self.delegate?.fetchFailed(withError: Error.FailedToPerformSearch.rawValue)
                 self.delegate?.hideProcessing()
             }
-        }.resume()
+        }
     }
     
     

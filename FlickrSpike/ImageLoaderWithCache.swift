@@ -72,4 +72,39 @@ extension UIImageView {
             
         }).resume()
     }
+    
+    
+    func loadImageUsingCache(withUrlString string: String, completionHandler: ((completed: Bool) ->())? ) {
+        
+        //Start with remove the old image from the reused cell
+        self.image = nil
+        
+        //First look in the Cache, if the image has been previously downloaded
+        if let cachedImage = imageCache.object(forKey: string) {
+            
+            self.image = cachedImage
+            completionHandler?(completed: true)
+            return
+        }
+        
+        //if Image on not found in the Cache, download it asynchrously
+        let url = URL(string: string)
+        URLSession.shared().dataTask(with: url!, completionHandler: { (data, response, error) in
+            if error != nil {
+                return
+            }
+            
+            DispatchQueue.main.async {
+                if let data = data {
+                    
+                    //If image is successfully downloaded, add it to Cache
+                    let image = UIImage(data: data)
+                    imageCache.setObject(image!, forKey: string)
+                    self.image = image
+                    completionHandler?(completed: true)
+                }
+            }
+            
+        }).resume()
+    }
 }
