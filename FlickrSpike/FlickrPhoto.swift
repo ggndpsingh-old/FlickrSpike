@@ -22,7 +22,6 @@ public class FlickrPhoto: NSObject {
     var ownerName   : String?
     
     var imageUrl    : String?
-    var thumbUrl    : String?
     var flickrUrl   : String?
     
     var tags        : String?
@@ -68,7 +67,6 @@ public class FlickrPhoto: NSObject {
         if let farm = farm, server = server, id = id, secret = secret {
             
             imageUrl  = "https://farm\(farm).staticflickr.com/\(server)/\(id)_\(secret)_c.jpg"
-            thumbUrl  = "https://farm\(farm).staticflickr.com/\(server)/\(id)_\(secret)_q.jpg"
             
             if let ownerId = ownerId {
                 flickrUrl = "https://www.flickr.com/photos/\(ownerId)/\(id)"

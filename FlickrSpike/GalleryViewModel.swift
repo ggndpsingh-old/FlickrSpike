@@ -12,6 +12,10 @@ public protocol GalleryViewModelDelegate: class {
     
     func showProcessing()
     func hideProcessing()
+    
+    func fetchFailed(withError error: Int?)
+    func searchFailed(withError error: Int?)
+
 }
 
 class GalleryViewModel {
@@ -57,8 +61,11 @@ class GalleryViewModel {
             
             //Stop loading if error occurs
             if error != nil {
+                print(error)
+                if let code = error?.code {
+                    self.delegate?.fetchFailed(withError: code)
+                }
                 self.delegate?.hideProcessing()
-                completionHandler(images: nil, error: error)
                 return
             }
             
@@ -78,20 +85,25 @@ class GalleryViewModel {
                             }
                             self.delegate?.hideProcessing()
                             completionHandler(images: images, error: nil)
+                            
                         } else {
-                            completionHandler(images: nil, error: nil)
+                            
+                            self.delegate?.fetchFailed(withError: Error.FailedToLaodPhotos.rawValue)
                             self.delegate?.hideProcessing()
                         }
                     } else {
-                        completionHandler(images: nil, error: nil)
+                        
+                        self.delegate?.fetchFailed(withError: Error.FailedToLaodPhotos.rawValue)
                         self.delegate?.hideProcessing()
                     }
                 } else {
-                    completionHandler(images: nil, error: nil)
+                    
+                    self.delegate?.fetchFailed(withError: Error.FailedToLaodPhotos.rawValue)
                     self.delegate?.hideProcessing()
                 }
             } else {
-                completionHandler(images: nil, error: nil)
+                
+                self.delegate?.fetchFailed(withError: Error.FailedToLaodPhotos.rawValue)
                 self.delegate?.hideProcessing()
             }
         }.resume()
@@ -125,7 +137,9 @@ class GalleryViewModel {
             //Stop loading if error occurs
             if error != nil {
                 self.delegate?.hideProcessing()
-                completionHandler(searchString: string, images: nil, error: error)
+                if let code = error?.code {
+                    self.delegate?.fetchFailed(withError: code)
+                }
                 return
             }
             
@@ -144,21 +158,26 @@ class GalleryViewModel {
                             }
                             self.delegate?.hideProcessing()
                             completionHandler(searchString: string, images: images, error: nil)
+                        
                         } else {
+                            
+                            self.delegate?.fetchFailed(withError: Error.FailedToPerformSearch.rawValue)
                             self.delegate?.hideProcessing()
-                            completionHandler(searchString: string, images: images, error: nil)
                         }
                     } else {
+                        
+                        self.delegate?.fetchFailed(withError: Error.FailedToPerformSearch.rawValue)
                         self.delegate?.hideProcessing()
-                        completionHandler(searchString: string, images: images, error: nil)
                     }
                 } else {
+                    
+                    self.delegate?.fetchFailed(withError: Error.FailedToPerformSearch.rawValue)
                     self.delegate?.hideProcessing()
-                    completionHandler(searchString: string, images: images, error: nil)
                 }
             } else {
+                
+                self.delegate?.fetchFailed(withError: Error.FailedToPerformSearch.rawValue)
                 self.delegate?.hideProcessing()
-                completionHandler(searchString: string, images: images, error: nil)
             }
         }.resume()
     }

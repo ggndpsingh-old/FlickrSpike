@@ -16,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
+        //Setup Main Window
         window = UIWindow(frame: UIScreen.main().bounds)
         window?.makeKeyAndVisible()
         window?.rootViewController = UINavigationController(rootViewController: GalleryViewController())
@@ -24,6 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().shadowImage = UIImage()
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         
+        //Setup Status bar Style
         application.statusBarStyle = .lightContent
         
         return true

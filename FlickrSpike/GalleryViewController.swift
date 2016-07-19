@@ -123,6 +123,10 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailC
         
         setupNavigationBar()
         setupViews()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         fetchRecentPhotosFromFlickr()
     }
@@ -166,19 +170,25 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailC
     //MARK: Fetch Photos from Flickr
     //----------------------------------------------------------------------------------------
     func fetchRecentPhotosFromFlickr() {
-        viewModel.fetchRecentImagesFromFlickr(atPage: pagesLoaded) { (loadedPhotos, error) in
-            DispatchQueue.main.async {
-                
-                //If there are alredy photos loaded, add new photos to current photos
-                if let current = self.flickrPhotos, loaded = loadedPhotos {
-                    self.flickrPhotos = current + loaded
+        
+        if Reachability.isConnectedToNetwork() {
+        
+            viewModel.fetchRecentImagesFromFlickr(atPage: pagesLoaded) { (loadedPhotos, error) in
+                DispatchQueue.main.async {
                     
-                } else { //Set loaded photo
-                    self.flickrPhotos = loadedPhotos
+                    //If there are alredy photos loaded, add new photos to current photos
+                    if let current = self.flickrPhotos, loaded = loadedPhotos {
+                        self.flickrPhotos = current + loaded
+                        
+                    } else { //Set loaded photo
+                        self.flickrPhotos = loadedPhotos
+                    }
                 }
             }
+            pagesLoaded += 1
+        } else {
+            showErrorMessage(forCode: Error.NoInternet.rawValue, completionHandler: nil)
         }
-        pagesLoaded += 1
     }
     
     
@@ -196,6 +206,18 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailC
     func hideProcessing() {
         DispatchQueue.main.async {
             self.spinner.stopAnimating()
+        }
+    }
+    
+    func fetchFailed(withError error: Int?) {
+        DispatchQueue.main.async {
+            showErrorMessage(forCode: error!, completionHandler: nil)
+        }
+    }
+    
+    func searchFailed(withError error: Int?) {
+        DispatchQueue.main.async {
+            showErrorMessage(forCode: error!, completionHandler: nil)
         }
     }
 }
@@ -400,28 +422,33 @@ extension GalleryViewController: UISearchBarDelegate {
     //MARK:- Perform Search
     func handleSearch() {
         
-        viewModel.searchflickrForTags(inString: searchString, onPage: pagesLoaded) { (searchedString, images, error) in
-            DispatchQueue.main.async {
-                
-                //If there are alredy photos loaded
-                if let current = self.flickrPhotos, loaded = images {
+        if Reachability.isConnectedToNetwork() {
+            viewModel.searchflickrForTags(inString: searchString, onPage: pagesLoaded) { (searchedString, images, error) in
+                DispatchQueue.main.async {
                     
-                    //If the search string hasnt changed, add new photos to current photos
-                    if self.searchString == searchedString {
-                        self.flickrPhotos =  current + loaded
+                    //If there are alredy photos loaded
+                    if let current = self.flickrPhotos, loaded = images {
+                        
+                        //If the search string hasnt changed, add new photos to current photos
+                        if self.searchString == searchedString {
+                            self.flickrPhotos =  current + loaded
+                        
+                        //Else, set loaded photos
+                        } else {
+                            self.flickrPhotos = images
+                        }
                     
                     //Else, set loaded photos
                     } else {
                         self.flickrPhotos = images
                     }
-                
-                //Else, set loaded photos
-                } else {
-                    self.flickrPhotos = images
                 }
             }
+            pagesLoaded += 1
+            
+        } else {
+            showErrorMessage(forCode: Error.NoInternet.rawValue, completionHandler: nil)
         }
-        pagesLoaded += 1
     }
     
     

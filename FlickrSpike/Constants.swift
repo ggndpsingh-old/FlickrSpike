@@ -52,3 +52,12 @@ struct Images {
     static let FeedButtonImage      = UIImage(named: "icon-feed")
     static let CollectionButtonImage      = UIImage(named: "icon-collection")
 }
+
+
+//----------------------------------------------------------------------------------------
+//MARK:
+//MARK: Views
+//----------------------------------------------------------------------------------------
+struct Views {
+    static let MessageView = ErrorMessageView()
+}
