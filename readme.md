@@ -41,9 +41,9 @@ This is the main and only View Controller in the app. This includes a Split View
 
 * The Split View has two main components, a Menu Bar and a Collection View Controller.
 * The Collection View Controller has two cells, one of which contains a Table View Controller and the other contains a Collection View Controller.
-** The Menu bar is used as a Custom Tab Bar to swich between the two cells of the Split View, to access either Table or Collection View.
-** The Table View shows the Photos loaded from Flickr in full screen wide Square Views.
-** The Table View also has a header cell that shows the Username of the Published of each Photo.
-** The Table View has a Data Cell which displayes the Meta Data for the each Photo.
+    * The Menu bar is used as a Custom Tab Bar to swich between the two cells of the Split View, to access either Table or Collection View.
+    * The Table View shows the Photos loaded from Flickr in full screen wide Square Views.
+    * The Table View also has a header cell that shows the Username of the Published of each Photo.
+    * The Table View has a Data Cell which displayes the Meta Data for the each Photo.
 
 
