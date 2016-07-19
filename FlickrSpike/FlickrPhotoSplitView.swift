@@ -39,7 +39,6 @@ public protocol FlickrPhotoSplitViewDataSource: class {
 //--------------------------------------------------------------------------------
 public class FlickrPhotoSplitView: BaseView {
     
-    
     //----------------------------------------------------------------------------------------
     //MARK:
     //MARK:- Delegate & Data Source
@@ -98,13 +97,33 @@ public class FlickrPhotoSplitView: BaseView {
     
     //----------------------------------------------------------------------------------------
     //MARK:
+    //MARK:- Constants
+    //----------------------------------------------------------------------------------------
+    struct Constants {
+        
+        struct CellIds {
+            static let TableContainer       = "flickrPhotoTableContainerCell"
+            static let CollectionContainer  = "flickrPhotoCollectionContainerCell"
+        }
+    }
+    
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK:- Constants
+    //----------------------------------------------------------------------------------------
+    var isReversed = false
+    
+    
+    
+    //----------------------------------------------------------------------------------------
+    //MARK:
     //MARK:- Setup Views
     //----------------------------------------------------------------------------------------
     override func setupViews() {
         
         
-        splitView.register(FlickrPhotoTableContainerCell.self, forCellWithReuseIdentifier: "flickrPhotoTableContainerCell")
-        splitView.register(FlickrPhotoCollectionContainerCell.self, forCellWithReuseIdentifier: "flickrPhotoCollectionContainerCell")
+        splitView.register(FlickrPhotoTableContainerCell.self, forCellWithReuseIdentifier: Constants.CellIds.TableContainer)
+        splitView.register(FlickrPhotoCollectionContainerCell.self, forCellWithReuseIdentifier: Constants.CellIds.CollectionContainer)
         
         addSubview(menuBar)
         menuBar.topAnchor.constraint        (equalTo: topAnchor)    .isActive = true
@@ -196,21 +215,21 @@ extension FlickrPhotoSplitView: UICollectionViewDelegate, UICollectionViewDataSo
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let tableContainerCell = collectionView.dequeueReusableCell(withReuseIdentifier: "flickrPhotoTableContainerCell", for: indexPath) as! FlickrPhotoTableContainerCell
+        let tableContainerCell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.CellIds.TableContainer, for: indexPath) as! FlickrPhotoTableContainerCell
         tableView = tableContainerCell.tableView
         
-        let collectionContainerCell = collectionView.dequeueReusableCell(withReuseIdentifier: "flickrPhotoCollectionContainerCell", for: indexPath) as! FlickrPhotoCollectionContainerCell
+        let collectionContainerCell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.CellIds.CollectionContainer, for: indexPath) as! FlickrPhotoCollectionContainerCell
         self.collectionView = collectionContainerCell.collectionView
         
         let cells: [UICollectionViewCell] = [tableContainerCell, collectionContainerCell]
         
         if indexPath.item == 0 {
             
-            return cells[indexPath.row]
+            return isReversed ? cells.reversed()[indexPath.row] : cells[indexPath.row]
             
         } else {
             
-            return cells[indexPath.row]
+            return isReversed ? cells.reversed()[indexPath.row] : cells[indexPath.row]
         }
     }
     
@@ -224,15 +243,5 @@ extension FlickrPhotoSplitView: UICollectionViewDelegate, UICollectionViewDataSo
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: frame.width, height: frame.height - 50)
-    }
-    
-    public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let item = indexPath.item {
-            if item == 0  {
-                tableView?.reloadData()
-            } else {
-                self.collectionView?.reloadData()
-            }
-        }
     }
 }

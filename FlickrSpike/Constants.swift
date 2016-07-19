@@ -49,4 +49,6 @@ struct MainScreen {
 //----------------------------------------------------------------------------------------
 struct Images {
     static let OptionsButtonImage   = UIImage(named: "icon-options")
+    static let FeedButtonImage      = UIImage(named: "icon-feed")
+    static let CollectionButtonImage      = UIImage(named: "icon-collection")
 }

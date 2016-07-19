@@ -34,6 +34,18 @@ public class FlickrPhotoTableView: UITableView, UITableViewDataSource, UITableVi
     
     //----------------------------------------------------------------------------------------
     //MARK:
+    //MARK: Constants
+    //----------------------------------------------------------------------------------------
+    struct Constants {
+        struct CellIds {
+            static let PhotoCell    = "flickrPhotoTableViewCell"
+            static let DataCell     = "flickrPhotoDataCell"
+        }
+    }
+    
+    
+    //----------------------------------------------------------------------------------------
+    //MARK:
     //MARK: Variables
     //----------------------------------------------------------------------------------------
     var splitView: FlickrPhotoSplitView!
@@ -52,8 +64,8 @@ public class FlickrPhotoTableView: UITableView, UITableViewDataSource, UITableVi
         estimatedRowHeight = MainScreen.Size.width + 60
         
         //register FlickrPhoto Cell
-        register(FlickrPhotoTableViewCell.self, forCellReuseIdentifier: "flickrPhotoTableViewCell")
-        register(FlickrPhotoDataCell.self, forCellReuseIdentifier: "flickrPhotoDataCell")
+        register(FlickrPhotoTableViewCell.self, forCellReuseIdentifier: Constants.CellIds.PhotoCell)
+        register(FlickrPhotoDataCell.self, forCellReuseIdentifier: Constants.CellIds.DataCell)
         
         //Set delegate & data source
         delegate = self
@@ -118,7 +130,7 @@ public class FlickrPhotoTableView: UITableView, UITableViewDataSource, UITableVi
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if indexPath.row == 0 {
-            let cell = dequeueReusableCell(withIdentifier: "flickrPhotoTableViewCell") as! FlickrPhotoTableViewCell
+            let cell = dequeueReusableCell(withIdentifier: Constants.CellIds.PhotoCell) as! FlickrPhotoTableViewCell
             cell.tableView = self
             cell.indexPath = indexPath
             cell.flickrPhoto = flickrPhotos![indexPath.section]
@@ -126,7 +138,7 @@ public class FlickrPhotoTableView: UITableView, UITableViewDataSource, UITableVi
             return cell
             
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "flickrPhotoDataCell") as! FlickrPhotoDataCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellIds.DataCell) as! FlickrPhotoDataCell
             cell.flickrPhoto = flickrPhotos![indexPath.section]
             
             return cell

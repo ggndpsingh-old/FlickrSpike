@@ -14,8 +14,35 @@ public protocol FlickrPhotoCollectionDataSource: class {
     func reloadflickrPhotos(in flickrPhotoCollectionView: FlickrPhotoCollectionView)
 }
 
-public class FlickrPhotoCollectionView: UICollectionView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
+
+
+public class FlickrPhotoCollectionView: UICollectionView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: UI Elements
+    //----------------------------------------------------------------------------------------
+    lazy public var refresher: UIRefreshControl! = {
+        let rc = UIRefreshControl()
+        rc.addTarget(self, action: #selector(reload), for: .valueChanged)
+        return rc
+    }()
+    
+    
+    //----------------------------------------------------------------------------------------
+    //MARK:
+    //MARK: Constants
+    //----------------------------------------------------------------------------------------
+    struct Constants {
+        
+        struct CellIds {
+            static let PhotoCell = "flickrPhotoCollectionViewCell"
+        }
+    }
+    
+    
     //----------------------------------------------------------------------------------------
     //MARK:
     //MARK: Variables
@@ -27,16 +54,6 @@ public class FlickrPhotoCollectionView: UICollectionView, UICollectionViewDelega
     }
     
     var splitView: FlickrPhotoSplitView!
-    
-    //----------------------------------------------------------------------------------------
-    //MARK:
-    //MARK: UI Elements
-    //----------------------------------------------------------------------------------------
-    lazy public var refresher: UIRefreshControl! = {
-        let rc = UIRefreshControl()
-        rc.addTarget(self, action: #selector(reload), for: .valueChanged)
-        return rc
-    }()
     
     
     
@@ -54,7 +71,7 @@ public class FlickrPhotoCollectionView: UICollectionView, UICollectionViewDelega
         dataSource = self
         
         //register FlickrPhoto Cell
-        register(FlickrPhotoCollectionViewCell.self, forCellWithReuseIdentifier: "flickrPhotoCollectionViewCell")
+        register(FlickrPhotoCollectionViewCell.self, forCellWithReuseIdentifier: Constants.CellIds.PhotoCell)
         
         addSubview(refresher)
         reloadData()
@@ -81,7 +98,7 @@ public class FlickrPhotoCollectionView: UICollectionView, UICollectionViewDelega
     
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "flickrPhotoCollectionViewCell", for: indexPath) as! FlickrPhotoCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.CellIds.PhotoCell, for: indexPath) as! FlickrPhotoCollectionViewCell
         
         cell.flickrPhoto = flickrPhotos?[indexPath.item!]
         return cell

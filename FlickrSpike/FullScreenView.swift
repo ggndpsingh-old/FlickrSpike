@@ -107,6 +107,7 @@ class FullScreenView: UIScrollView {
     private struct Constants {
         static let MessageDuration: Double  = 0.2
         static let PanDistanceToDismiss: CGFloat = 160
+        static let SpaceAboveColletionView: CGFloat = 134
     }
     
     
@@ -339,12 +340,12 @@ class FullScreenView: UIScrollView {
         }
         
         if let views = photo.views {
-            viewsLabel.attributedText = createAttributdString(withAddedBoldString: "Views:", toString: views, withFontSize: 13)
+            viewsLabel.attributedText = createAttributdString(withAddedBoldString: "\(Strings.Views):", toString: views, withFontSize: 13)
         }
         
         if let tags = photo.tags {
             let separated = tags.components(separatedBy: .whitespaces).joined(separator: ", ")
-            tagsLabel.attributedText = createAttributdString(withAddedBoldString: "Tags:", toString: separated, withFontSize: 13)
+            tagsLabel.attributedText = createAttributdString(withAddedBoldString: "\(Strings.Tags):", toString: separated, withFontSize: 13)
         }
         
         if let date = photo.published {
@@ -356,7 +357,7 @@ class FullScreenView: UIScrollView {
             These constraints set the Photo View at the exact location in the window as the Photo Cell in the Collection View
         */
         photoLeftAnchor.constant    = rect.origin.x
-        photoTopAnchor.constant     = rect.origin.y
+        photoTopAnchor.constant     = rect.origin.y + Constants.SpaceAboveColletionView
         photoWidthAnchor.constant   = rect.width
         photoHeightAnchor.constant  = rect.height
         

@@ -29,8 +29,10 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
     //MARK:
     //MARK: Constants
     //--------------------------------------------------------------------------------
-    let cellId = "cellId"
-    let imageNames = ["icon-feed", "icon-collection"]
+    struct Constants {
+        static let CellId = "cellId"
+        static let Icons = [Images.FeedButtonImage, Images.CollectionButtonImage]
+    }
     
     
     
@@ -49,7 +51,7 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        collectionView.register(MenuCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(MenuCell.self, forCellWithReuseIdentifier: Constants.CellId)
         
         addSubview(collectionView)
         collectionView.leftAnchor.constraint    (equalTo: leftAnchor)   .isActive = true
@@ -108,9 +110,11 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath as IndexPath) as! MenuCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.CellId, for: indexPath as IndexPath) as! MenuCell
         
-        cell.imageView.image = UIImage(named: imageNames[indexPath.item!])?.withRenderingMode(.alwaysTemplate)
+        
+        let image = splitView?.isReversed == true ? Constants.Icons.reversed()[indexPath.item!]?.withRenderingMode(.alwaysTemplate) : Constants.Icons[indexPath.item!]?.withRenderingMode(.alwaysTemplate)
+        cell.imageView.image = image
         cell.tintColor = UIColor.darkGray()
         
         return cell

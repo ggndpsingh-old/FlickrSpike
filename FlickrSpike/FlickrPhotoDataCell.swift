@@ -60,12 +60,12 @@ class FlickrPhotoDataCell: BaseTableCell {
         
         
         if let views = flickrPhoto?.views {
-            viewsLabel = createLabel(withAddedBoldString: "Views:", toString: views, withFontSize: 13)
+            viewsLabel = createLabel(withAddedBoldString: "\(Strings.Views):", toString: views, withFontSize: 13)
         }
         
         if let tags = flickrPhoto?.tags {
             let separated = tags.components(separatedBy: .whitespaces).joined(separator: ", ")
-            tagsLabel = createLabel(withAddedBoldString: "Tags:", toString: separated, withFontSize: 13)
+            tagsLabel = createLabel(withAddedBoldString: "\(Strings.Tags):", toString: separated, withFontSize: 13)
         }
         
         if let date = flickrPhoto?.published {

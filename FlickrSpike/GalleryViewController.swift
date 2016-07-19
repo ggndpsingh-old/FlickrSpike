@@ -24,9 +24,9 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailC
             if let count = flickrPhotos?.count {
                 
                 if isSearching {
-                    detailsLabel.text = "Showing \(count) Photos for \(searchString)"
+                    detailsLabel.text = Strings.ShowingAllPhotos(withCount: count, forTags: searchString)
                 } else {
-                    detailsLabel.text = "Showing \(count) Recent Photos"
+                    detailsLabel.text = Strings.ShowingAllRecentPhotos(withCount: count)
                 }
             }
         }
@@ -56,6 +56,13 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailC
         sv.translatesAutoresizingMaskIntoConstraints = false
         sv.delegate = self
         sv.dataSource = self
+        
+        /*
+            Split view can be reversed to switch the positions of Table View & Collection View
+            Default is false, and Table View is shown first
+        */
+        sv.isReversed = false
+        
         return sv
     }()
     
@@ -68,7 +75,6 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailC
         label.textColor = .white()
         label.font = UIFont.boldSystemFont(ofSize: 12)
         label.adjustsFontSizeToFitWidth = true
-        label.text = "Showing Everything"
         return label
     }()
     
@@ -77,7 +83,7 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailC
         let bar = UISearchBar(frame: CGRect.zero)
         bar.delegate = self
         bar.searchBarStyle = UISearchBarStyle.minimal
-        bar.placeholder = "Search Tags"
+        bar.placeholder = Strings.SearchTags
         bar.autocapitalizationType = .none
         bar.tintColor = UIColor.white()
         let textField = bar.value(forKey: "searchField") as! UITextField
@@ -227,7 +233,7 @@ extension GalleryViewController: FlickrPhotoSplitViewDelegate, FlickrPhotoSplitV
     func resetflickrPhotos(in flickrPhotoSplitView: FlickrPhotoSplitView) {
         flickrPhotos = nil
         pagesLoaded = 0
-        fetchRecentPhotosFromFlickr()
+        isSearching ? handleSearch() : fetchRecentPhotosFromFlickr()
     }
     
     
@@ -237,17 +243,17 @@ extension GalleryViewController: FlickrPhotoSplitViewDelegate, FlickrPhotoSplitV
     func showOptionsForFlickrPhoto(flickrPhoto: FlickrPhoto, withImageFile image: UIImage) {
         
         //Create Action Sheet Controller
-        let actionSheet = UIAlertController(title: "Photo Options", message: nil, preferredStyle: .actionSheet)
+        let actionSheet = UIAlertController(title: Strings.PhotoOptions, message: nil, preferredStyle: .actionSheet)
         
         
         //Save Photo To Gallery Action
-        let saveAction = UIAlertAction(title: "Save Photo", style: .default) { _ in
+        let saveAction = UIAlertAction(title: Strings.SavePhoto, style: .default) { _ in
             UIImageWriteToSavedPhotosAlbum(image, self, #selector(self.image(image:didFinishSavingWithError:contextInfo:)), nil)
         }
         
         
         //Open Photo in Safari Action
-        let openInSafariAction = UIAlertAction(title: "Open in Safari", style: .default) { _ in
+        let openInSafariAction = UIAlertAction(title: Strings.OpenInSafari, style: .default) { _ in
             if let url = flickrPhoto.flickrUrl {
                 UIApplication.shared().open(URL(string: url)!, options: [:], completionHandler: nil)
             }
@@ -255,12 +261,12 @@ extension GalleryViewController: FlickrPhotoSplitViewDelegate, FlickrPhotoSplitV
         
         
         //Send Photo as Email Attatchement Action
-        let sendEmailAction = UIAlertAction(title: "Share by Email", style: .default) { _ in
+        let sendEmailAction = UIAlertAction(title: Strings.ShareByEmail, style: .default) { _ in
             
             let mailComposeVC = MFMailComposeViewController()
             mailComposeVC.mailComposeDelegate = self
             mailComposeVC.addAttachmentData(UIImageJPEGRepresentation(image, 1)!, mimeType: "image/jpeg", fileName: "\(flickrPhoto.id!).jpeg")
-            mailComposeVC.setSubject("Flickr Photo: \(flickrPhoto.title)")
+            mailComposeVC.setSubject("\(flickrPhoto.title!)")
             
             self.present(mailComposeVC, animated: true, completion: nil)
         }
