@@ -2,6 +2,7 @@
 
 An Image Gallery that uses Flickr public image feed as its data source.
 
+**This app has been in written in Swift 3.0. It requires XCode 8 on the machine and ios 10 on the device to run. **
 
 #### Explicit requirements:  
 1. As a user (of the application) I can see publicly shared photos on Flickr.  
@@ -24,7 +25,7 @@ This app has deigned using Model-View-ViewModel (MVVM) pattern to provide a sepa
 Typically the project structure has the followings:  
 * ***Service*** – The core of the app that talks to the backend side via network calls
 * ***Model*** – The data model to represent an entity. eg. FlickrPhoto
-* ***View*** – The UI Elements which are container within a View Controler and interact with UI. eg. Table View Cells
+* ***View*** – The UI Elements which are contained within a View Controler and interact with UI. eg. Table View Cells
 * ***View-Model*** – The model representing the data necessary for the view to display itself; but it’s also responsible for gathering, interpreting, and transforming that data by communicating with services layer  
 *	***View-Controller*** – The controllers that directly interact with the UI and manage the UI state. The code for Views and View-Controllers have similar goals and they are commonly categorised into one category  
 
