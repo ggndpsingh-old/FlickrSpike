@@ -147,6 +147,7 @@ class GalleryViewController: UIViewController, MFMailComposeViewControllerDelega
         navigationController?.navigationBar.barTintColor = .navBar()
         navigationController?.hidesBarsOnSwipe = true
         navigationItem.titleView = searchBar
+        navigationItem.title = "Feed"
     }
     
     func setupViews() {
@@ -285,7 +286,7 @@ extension GalleryViewController: GalleryViewModelDelegate {
 
 //----------------------------------------------------------------------------------------
 //MARK:
-//MARK: Flickr Photo Split View Delegate & Data Source Methods
+//MARK: Split View Delegate & Data Source Methods
 //----------------------------------------------------------------------------------------
 
 extension GalleryViewController: FlickrPhotoSplitViewDelegate, FlickrPhotoSplitViewDataSource {
@@ -425,7 +426,13 @@ extension GalleryViewController: FlickrPhotoSplitViewDelegate, FlickrPhotoSplitV
         default:
             break
         }
-        
+    }
+    
+    func showUserPhotos(forUser user: String, withUsername username: String) {
+        let userVc = UserPhotosViewController()
+        userVc.user = user
+        userVc.username = username
+        navigationController?.pushViewController(userVc, animated: true)
     }
 }
 

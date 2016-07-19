@@ -19,6 +19,7 @@ public protocol FlickrPhotoSplitViewDelegate: class {
     func resetflickrPhotos(in flickrPhotoSplitView: FlickrPhotoSplitView)
     func showOptionsForFlickrPhoto(flickrPhoto: FlickrPhoto, withImageFile image: UIImage, atIndexPath indexPath: IndexPath)
     
+    func showUserPhotos(forUser user: String, withUsername username: String)
 }
 
 
@@ -167,6 +168,10 @@ public class FlickrPhotoSplitView: BaseView {
     
     func showOptionsForFlickrPhoto(flickrPhoto: FlickrPhoto, withImageFile image: UIImage, atIndexPath indexPath: IndexPath) {
         delegate.showOptionsForFlickrPhoto(flickrPhoto: flickrPhoto, withImageFile: image, atIndexPath: indexPath)
+    }
+    
+    func showUserPhotos(forUser user: String, withUsername username: String) {
+        delegate.showUserPhotos(forUser: user, withUsername: username)
     }
     
     

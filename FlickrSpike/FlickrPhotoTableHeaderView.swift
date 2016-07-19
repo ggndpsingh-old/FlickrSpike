@@ -18,7 +18,7 @@ class FlickrPhotoTableHeaderView: BaseView {
     var flickrPhoto: FlickrPhoto? {
         didSet {
             if let name = flickrPhoto?.ownerName {
-                usernameLabel.text = name
+                usernameButton.setTitle(name, for: [])
             }
         }
     }
@@ -36,12 +36,14 @@ class FlickrPhotoTableHeaderView: BaseView {
     //MARK:
     //MARK: UI Elements
     //----------------------------------------------------------------------------------------
-    let usernameLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFont(ofSize: 13)
-        label.textAlignment = .left
-        return label
+    lazy var usernameButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 13)
+        button.contentHorizontalAlignment = .left
+        button.setTitleColor(.darkGray(), for: [])
+        button.addTarget(self, action: #selector(showUserPhotos), for: .touchUpInside)
+        return button
     }()
     
     lazy var optionsButton: UIButton = {
@@ -76,11 +78,11 @@ class FlickrPhotoTableHeaderView: BaseView {
         separator.rightAnchor.constraint    (equalTo: rightAnchor)                      .isActive = true
         
         //Username Label
-        addSubview(usernameLabel)
-        usernameLabel.topAnchor.constraint      (equalTo: topAnchor)                    .isActive = true
-        usernameLabel.bottomAnchor.constraint   (equalTo: bottomAnchor)                 .isActive = true
-        usernameLabel.leftAnchor.constraint     (equalTo: leftAnchor, constant: 20)     .isActive = true
-        usernameLabel.rightAnchor.constraint    (equalTo: rightAnchor, constant: -70)   .isActive = true
+        addSubview(usernameButton)
+        usernameButton.topAnchor.constraint      (equalTo: topAnchor)                    .isActive = true
+        usernameButton.bottomAnchor.constraint   (equalTo: bottomAnchor)                 .isActive = true
+        usernameButton.leftAnchor.constraint     (equalTo: leftAnchor, constant: 20)     .isActive = true
+        usernameButton.rightAnchor.constraint    (equalTo: rightAnchor, constant: -70)   .isActive = true
         
         //Options Button
         addSubview(optionsButton)
@@ -97,6 +99,12 @@ class FlickrPhotoTableHeaderView: BaseView {
     //----------------------------------------------------------------------------------------
     func showImageOptions() {
         tableView?.showImagesOptions(forFlickrPhoto: flickrPhoto!, atIndexPath: indexPath!)
+    }
+    
+    func showUserPhotos() {
+        if let user = flickrPhoto?.ownerId, username = flickrPhoto?.ownerName {
+            tableView?.showUserPhotos(forUser: user, withUsername: username)
+        }
     }
     
 }

@@ -19,6 +19,7 @@ struct FlickrAPI {
     
     static let SearchBaseUrl    = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=\(Key)"
     static let RecentBaseUrl    = "https://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=\(Key)"
+    static let UserBaseUrl      = "https://api.flickr.com/services/rest/?method=flickr.people.getPhotos&api_key=\(Key)"
     static let Arguments        = "tag_mode=all&format=json&nojsoncallback=1&extras=owner_name,date_upload,date_taken,tags,views"
     
     static let ImagesPerPage    = 20

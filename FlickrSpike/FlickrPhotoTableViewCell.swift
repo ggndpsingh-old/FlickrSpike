@@ -98,7 +98,6 @@ class FlickrPhotoTableViewCell: BaseTableCell {
         default:
             break
         }
-        
     }
     
 }

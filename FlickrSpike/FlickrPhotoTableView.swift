@@ -173,6 +173,10 @@ public class FlickrPhotoTableView: UITableView, UITableViewDataSource, UITableVi
         }
     }
     
+    func showUserPhotos(forUser user: String, withUsername username: String) {
+        splitView.showUserPhotos(forUser: user, withUsername: username)
+    }
+    
     func reload() {
         refresher.endRefreshing()
         splitView.reset()
