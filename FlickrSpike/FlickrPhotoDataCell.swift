@@ -37,7 +37,15 @@ class FlickrPhotoDataCell: BaseTableCell {
         return label
     }()
     
-    let timeLabel: UILabel = {
+    let takenLabel: UILabel = {
+        let label = UILabel(frame: CGRect.zero)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 11)
+        label.textColor = UIColor.lightGray()
+        return label
+    }()
+    
+    let publishedLabel: UILabel = {
         let label = UILabel(frame: CGRect.zero)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 11)
@@ -56,7 +64,7 @@ class FlickrPhotoDataCell: BaseTableCell {
         //Remove labels before each reuse of cell
         viewsLabel.removeFromSuperview()
         tagsLabel.removeFromSuperview()
-        timeLabel.removeFromSuperview()
+        publishedLabel.removeFromSuperview()
         
         
         if let views = flickrPhoto?.views {
@@ -68,8 +76,12 @@ class FlickrPhotoDataCell: BaseTableCell {
             tagsLabel = createLabel(withAddedBoldString: "\(Strings.Tags):", toString: separated, withFontSize: 13)
         }
         
+        if let date = flickrPhoto?.taken {
+            takenLabel.text = "Taken: \(date.longFormat())"
+        }
+        
         if let date = flickrPhoto?.published {
-            timeLabel.text = date.longFormat()
+            publishedLabel.text = "Published: \(date.longFormat())"
         }
         
         
@@ -82,15 +94,22 @@ class FlickrPhotoDataCell: BaseTableCell {
         
         addSubview(tagsLabel)
         tagsLabel.topAnchor.constraint      (equalTo: viewsLabel.bottomAnchor, constant: 5) .isActive = true
-        tagsLabel.bottomAnchor.constraint   (equalTo: bottomAnchor, constant: -60)          .isActive = true
+//        tagsLabel.bottomAnchor.constraint   (equalTo: bottomAnchor, constant: -60)          .isActive = true
         tagsLabel.leftAnchor.constraint     (equalTo: leftAnchor, constant: 16)             .isActive = true
         tagsLabel.rightAnchor.constraint    (equalTo: rightAnchor, constant: -16)           .isActive = true
         
-        addSubview(timeLabel)
-        timeLabel.bottomAnchor.constraint   (equalTo: bottomAnchor, constant: -20)          .isActive = true
-        timeLabel.leftAnchor.constraint     (equalTo: leftAnchor, constant: 16)             .isActive = true
-        timeLabel.widthAnchor.constraint    (equalToConstant: 160)                          .isActive = true
-        timeLabel.heightAnchor.constraint   (equalToConstant: 20)                           .isActive = true
+        addSubview(takenLabel)
+        takenLabel.topAnchor.constraint     (equalTo: tagsLabel.bottomAnchor, constant: 10) .isActive = true
+        takenLabel.leftAnchor.constraint    (equalTo: leftAnchor, constant: 16)             .isActive = true
+        takenLabel.rightAnchor.constraint   (equalTo: rightAnchor, constant: -16)           .isActive = true
+        takenLabel.heightAnchor.constraint  (equalToConstant: 20)                           .isActive = true
+        
+        addSubview(publishedLabel)
+        publishedLabel.topAnchor.constraint     (equalTo: takenLabel.bottomAnchor)          .isActive = true
+        publishedLabel.leftAnchor.constraint    (equalTo: leftAnchor, constant: 16)             .isActive = true
+        publishedLabel.rightAnchor.constraint   (equalTo: rightAnchor, constant: -16)           .isActive = true
+        publishedLabel.bottomAnchor.constraint  (equalTo: bottomAnchor, constant: -20)          .isActive = true
+        publishedLabel.heightAnchor.constraint  (equalToConstant: 20)                           .isActive = true
     }
     
     
@@ -114,5 +133,12 @@ class FlickrPhotoDataCell: BaseTableCell {
         label.attributedText = attributedString
         
         return label
+    }
+    
+    override func prepareForReuse() {
+        viewsLabel.attributedText = nil
+        tagsLabel.attributedText = nil
+        takenLabel.text = nil
+        publishedLabel.text = nil
     }
 }

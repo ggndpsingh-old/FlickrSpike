@@ -19,9 +19,9 @@ struct FlickrAPI {
     
     static let SearchBaseUrl    = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=\(Key)"
     static let RecentBaseUrl    = "https://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=\(Key)"
-    static let Arguments        = "tag_mode=all&format=json&nojsoncallback=1&extras=owner_name,date_upload,tags,views"
+    static let Arguments        = "tag_mode=all&format=json&nojsoncallback=1&extras=owner_name,date_upload,date_taken,tags,views"
     
-    static let ImagesPerPage    = 50
+    static let ImagesPerPage    = 20
     
     static let SafeSearch       = SafeArguments.Safe
     
@@ -29,6 +29,11 @@ struct FlickrAPI {
         case Safe       = 1
         case Moderate   = 2
         case Restricted = 3
+    }
+    
+    enum Sort: String {
+        case DateTaken      = "date-taken-desc"
+        case DatePublished  = "date-posted-desc"
     }
 }
 

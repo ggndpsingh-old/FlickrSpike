@@ -99,7 +99,7 @@ public class FlickrPhotoCollectionView: UICollectionView, UICollectionViewDelega
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.CellIds.PhotoCell, for: indexPath) as! FlickrPhotoCollectionViewCell
-        
+        cell.indexPath = indexPath
         cell.flickrPhoto = flickrPhotos?[indexPath.item!]
         return cell
     }

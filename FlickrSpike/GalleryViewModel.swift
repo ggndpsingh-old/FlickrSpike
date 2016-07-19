@@ -40,17 +40,16 @@ class GalleryViewModel {
     //MARK:
     //MARK: Fetch Recent Images from Flickr
     //----------------------------------------------------------------------------------------
-    func fetchRecentImagesFromFlickr(atPage page:  Int, completionHandler: (images: [FlickrPhoto]?, error: NSError?) -> ()) {
+    func fetchRecentImagesFromFlickr(atPage page:  Int, sortedBy sort: FlickrAPI.Sort, completionHandler: (images: [FlickrPhoto]?, error: NSError?) -> ()) {
         
         //Show loading spinner on View Controller
         delegate?.showProcessing()
         
         var images = [FlickrPhoto]()
         
-        
         //Construct fetch Url
-        let urlString = "\(FlickrAPI.RecentBaseUrl)&per_page=\(FlickrAPI.ImagesPerPage)&page=\(page)&\(FlickrAPI.Arguments)&safe_search=\(FlickrAPI.SafeSearch.rawValue)"
-        
+        let urlString = "\(FlickrAPI.RecentBaseUrl)&per_page=\(FlickrAPI.ImagesPerPage)&page=\(page)&\(FlickrAPI.Arguments)&safe_search=\(FlickrAPI.SafeSearch.rawValue)&sort=\(sort.rawValue)"
+        print(urlString)
         
         //Create URL Request
         let request = URLRequest(url: URL(string: urlString)!)
@@ -115,7 +114,7 @@ class GalleryViewModel {
     //MARK:
     //MARK: Search Images from Flickr
     //----------------------------------------------------------------------------------------
-    func searchflickrForTags(inString string: String, onPage page: Int, completionHandler: (searchString: String, images: [FlickrPhoto]?, error: NSError?) -> ()) {
+    func searchflickrForTags(inString string: String, onPage page: Int, sortedBy sort: FlickrAPI.Sort, completionHandler: (searchString: String, images: [FlickrPhoto]?, error: NSError?) -> ()) {
         
         //Show loading spinner on View Controller
         delegate?.showProcessing()
@@ -126,7 +125,7 @@ class GalleryViewModel {
         let tags = string.components(separatedBy: .whitespaces).joined(separator: ",").lowercased()
         
         //Construct Search Url
-        let urlString = "\(FlickrAPI.SearchBaseUrl)&per_page=\(FlickrAPI.ImagesPerPage)&page=\(page)&tags=\(tags)&\(FlickrAPI.Arguments)&safe_search=\(FlickrAPI.SafeSearch.rawValue)"
+        let urlString = "\(FlickrAPI.SearchBaseUrl)&per_page=\(FlickrAPI.ImagesPerPage)&page=\(page)&tags=\(tags)&\(FlickrAPI.Arguments)&safe_search=\(FlickrAPI.SafeSearch.rawValue)&sort=\(sort.rawValue)"
         
         //Create URL Request
         let request = URLRequest(url: URL(string: urlString)!)

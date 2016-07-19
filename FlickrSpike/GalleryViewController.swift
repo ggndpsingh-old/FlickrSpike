@@ -173,7 +173,7 @@ class GalleryViewController: UIViewController, GalleryViewModelDelegate, MFMailC
         
         if Reachability.isConnectedToNetwork() {
         
-            viewModel.fetchRecentImagesFromFlickr(atPage: pagesLoaded) { (loadedPhotos, error) in
+            viewModel.fetchRecentImagesFromFlickr(atPage: pagesLoaded, sortedBy: FlickrAPI.Sort.DateTaken) { (loadedPhotos, error) in
                 DispatchQueue.main.async {
                     
                     //If there are alredy photos loaded, add new photos to current photos
@@ -423,7 +423,7 @@ extension GalleryViewController: UISearchBarDelegate {
     func handleSearch() {
         
         if Reachability.isConnectedToNetwork() {
-            viewModel.searchflickrForTags(inString: searchString, onPage: pagesLoaded) { (searchedString, images, error) in
+            viewModel.searchflickrForTags(inString: searchString, onPage: pagesLoaded, sortedBy: FlickrAPI.Sort.DateTaken) { (searchedString, images, error) in
                 DispatchQueue.main.async {
                     
                     //If there are alredy photos loaded

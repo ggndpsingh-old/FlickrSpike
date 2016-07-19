@@ -27,6 +27,7 @@ public class FlickrPhoto: NSObject {
     var tags        : String?
     var views       : String?
     
+    var taken       : Date?
     var published   : Date?
     
     
@@ -49,6 +50,13 @@ public class FlickrPhoto: NSObject {
         if let timeStamp = photo["dateupload"] as? String {
             published = Date(timeIntervalSince1970: Double(Int(timeStamp)!))
         }
+        
+        if let dateString = photo["datetaken"] as? String {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+            taken = formatter.date(from: dateString)
+        }
+        
         
         createUrls(forFlickrPhoto: photo)
     }

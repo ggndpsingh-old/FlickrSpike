@@ -133,6 +133,7 @@ public class FlickrPhotoTableView: UITableView, UITableViewDataSource, UITableVi
             let cell = dequeueReusableCell(withIdentifier: Constants.CellIds.PhotoCell) as! FlickrPhotoTableViewCell
             cell.tableView = self
             cell.indexPath = indexPath
+            cell.tag = indexPath.section
             cell.flickrPhoto = flickrPhotos![indexPath.section]
             
             return cell

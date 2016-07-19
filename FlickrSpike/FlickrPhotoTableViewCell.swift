@@ -18,14 +18,21 @@ class FlickrPhotoTableViewCell: BaseTableCell {
     var flickrPhoto: FlickrPhoto? {
         didSet {
             if let urlString = flickrPhoto?.imageUrl {
-                photoView.loadImageUsingCache(withUrlString: urlString) { completed in
-                    self.photoView.addGestureRecognizer(self.longTap)
+                if let section = self.indexPath?.section {
+                    photoView.tag = section
+                    photoView.loadImageUsingCache(withUrlString: urlString, andTag: section) { completed in
+                        self.photoView.addGestureRecognizer(self.longTap)
+                    }
                 }
             }
         }
     }
     
-    var indexPath: IndexPath?
+    var indexPath: IndexPath? {
+        didSet {
+            photoView.tag = indexPath!.section
+        }
+    }
     
     //----------------------------------------------------------------------------------------
     //MARK:

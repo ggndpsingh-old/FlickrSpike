@@ -29,43 +29,7 @@ extension Date {
 
 
 
-//----------------------------------------------------------------------------------------
-//MARK:
-//MARK: UIImage
-//----------------------------------------------------------------------------------------
 
-//MARK:- Cache
-let imageCache = Cache<AnyObject, UIImage>()
-extension UIImageView {
-    
-    func loadImageUsingCache(withUrlString string: String, completionHandler: ((completed: Bool) ->())? ) {
-        
-        self.image = nil
-        
-        if let cachedImage = imageCache.object(forKey: string) {
-            self.image = cachedImage
-            completionHandler?(completed: true)
-            return
-        }
-        
-        let url = URL(string: string)
-        URLSession.shared().dataTask(with: url!, completionHandler: { (data, response, error) in
-            if error != nil {
-                return
-            }
-            
-            DispatchQueue.main.async {
-                
-                let image = UIImage(data: data!)
-                imageCache.setObject(image!, forKey: string)
-                
-                self.image = image
-                completionHandler?(completed: true)
-            }
-            
-        }).resume()
-    }
-}
 
 
 

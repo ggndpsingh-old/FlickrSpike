@@ -18,8 +18,17 @@ class FlickrPhotoCollectionViewCell: BaseCollectionCell {
     var flickrPhoto: FlickrPhoto? {
         didSet {
             if let urlString = flickrPhoto?.imageUrl {
-                photoView.loadImageUsingCache(withUrlString: urlString, completionHandler: nil)
+                if let item = self.indexPath?.item {
+                    photoView.tag = item
+                    photoView.loadImageUsingCache(withUrlString: urlString, andTag: item, completionHandler: nil)
+                }
             }
+        }
+    }
+    
+    var indexPath: IndexPath? {
+        didSet {
+            photoView.tag = indexPath!.item!
         }
     }
     
