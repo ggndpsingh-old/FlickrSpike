@@ -9,6 +9,13 @@
 import UIKit
 
 
+/*
+    
+    Container cell for Split View that contains Table View
+ 
+ */
+
+
 class FlickrPhotoTableContainerCell: BaseCollectionCell {
     
     //----------------------------------------------------------------------------------------

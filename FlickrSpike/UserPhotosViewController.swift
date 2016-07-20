@@ -55,7 +55,7 @@ class UserPhotosViewController: UIViewController, MFMailComposeViewControllerDel
          Split view can be reversed to switch the positions of Table View & Collection View
          Default is false, and Table View is shown first
          */
-        sv.isReversed = false
+        sv.isReversed = true
         
         return sv
     }()
@@ -253,7 +253,7 @@ extension UserPhotosViewController: FlickrPhotoSplitViewDelegate, FlickrPhotoSpl
         
         
         //Cancel Action
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: Strings.Cancel, style: .cancel, handler: nil)
         
         
         //Add Actions

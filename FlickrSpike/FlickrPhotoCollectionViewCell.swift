@@ -9,6 +9,14 @@
 import UIKit
 
 
+/*
+ 
+    Collection View cell that contains the Photo
+ 
+ 
+ */
+
+
 class FlickrPhotoCollectionViewCell: BaseCollectionCell {
     
     //----------------------------------------------------------------------------------------
@@ -51,6 +59,7 @@ class FlickrPhotoCollectionViewCell: BaseCollectionCell {
     //----------------------------------------------------------------------------------------
     override func setupViews() {
         
+        //Photo View
         addSubview(photoView)
         photoView.topAnchor.constraint      (equalTo: topAnchor)    .isActive = true
         photoView.bottomAnchor.constraint   (equalTo: bottomAnchor) .isActive = true

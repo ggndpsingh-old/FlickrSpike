@@ -51,17 +51,21 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        collectionView.register(MenuCell.self, forCellWithReuseIdentifier: Constants.CellId)
-        
+        //Collectin View
         addSubview(collectionView)
         collectionView.leftAnchor.constraint    (equalTo: leftAnchor)   .isActive = true
         collectionView.rightAnchor.constraint   (equalTo: rightAnchor)  .isActive = true
         collectionView.topAnchor.constraint     (equalTo: topAnchor)    .isActive = true
         collectionView.bottomAnchor.constraint  (equalTo: bottomAnchor) .isActive = true
         
+        //Register Menu Cell
+        collectionView.register(MenuCell.self, forCellWithReuseIdentifier: Constants.CellId)
+        
+        //Select the first cell when Menu Bar is loaded for the first time
         let selectedIndexPath = IndexPath(item: 0, section: 0)
         collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])
         
+        //Horizontal bar
         setupHorizontalBar()
     }
     
@@ -76,6 +80,7 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
     //MARK: Setup Horizontal Bar
     //--------------------------------------------------------------------------------
     func setupHorizontalBar() {
+        
         let horizontalBarView = UIView()
         horizontalBarView.backgroundColor = UIColor.menuBarTint()
         horizontalBarView.translatesAutoresizingMaskIntoConstraints = false
@@ -112,7 +117,9 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.CellId, for: indexPath as IndexPath) as! MenuCell
         
-        
+        /*
+            Initialize Menu Cell and check if cells need to be reversed to be kept in sync with Split View
+         */
         let image = splitView?.isReversed == true ? Constants.Icons.reversed()[indexPath.item!]?.withRenderingMode(.alwaysTemplate) : Constants.Icons[indexPath.item!]?.withRenderingMode(.alwaysTemplate)
         cell.imageView.image = image
         cell.tintColor = UIColor.darkGray()

@@ -313,22 +313,6 @@ class FullScreenView: UIScrollView {
     }
     
     
-    
-    //----------------------------------------------------------------------------------------
-    //MARK:
-    //MARK: Method to create String with Bold Initial string
-    //----------------------------------------------------------------------------------------
-    func createAttributdString(withAddedBoldString boldString: String, toString string: String, withFontSize fontSize: CGFloat) -> AttributedString {
-        
-        let boldAttribute = [NSFontAttributeName: UIFont.boldSystemFont(ofSize: fontSize)]
-        let attributedString = NSMutableAttributedString(string: "\(boldString) \(string)")
-        let range = NSRange(location: 0, length: boldString.characters.count)
-        attributedString.addAttributes(boldAttribute, range: range)
-        
-        return attributedString
-    }
-    
-    
     //-----------------------------------------------------------------------------
     //MARK:
     //MARK: Show Full Screen View

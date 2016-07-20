@@ -8,6 +8,12 @@
 
 import Foundation
 
+/*
+ 
+    Model For Flickr Photo
+ 
+ */
+
 public class FlickrPhoto: NSObject {
     
     
@@ -64,7 +70,7 @@ public class FlickrPhoto: NSObject {
     
     //----------------------------------------------------------------------------------------
     //MARK:
-    //MARK: Create Urls
+    //MARK: URL Constructor
     //----------------------------------------------------------------------------------------
     func createUrls(forFlickrPhoto photo: NSDictionary) {
         

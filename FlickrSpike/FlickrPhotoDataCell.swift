@@ -8,6 +8,15 @@
 
 import UIKit
 
+
+/*
+    
+    Table View cell that contins Photo Data
+    Displays, Number of Views, tags, Date taken and Date published
+ 
+ */
+
+
 class FlickrPhotoDataCell: BaseTableCell {
     
     //----------------------------------------------------------------------------------------
@@ -85,24 +94,27 @@ class FlickrPhotoDataCell: BaseTableCell {
         }
         
         
-        //Add labels to view with constraints
+        //Views Label
         addSubview(viewsLabel)
         viewsLabel.topAnchor.constraint     (equalTo: topAnchor, constant: 16)              .isActive = true
         viewsLabel.leftAnchor.constraint    (equalTo: leftAnchor, constant: 16)             .isActive = true
         viewsLabel.rightAnchor.constraint   (equalTo: rightAnchor, constant: -16)           .isActive = true
         viewsLabel.heightAnchor.constraint  (equalToConstant: 20)                           .isActive = true
         
+        //Tags Label
         addSubview(tagsLabel)
         tagsLabel.topAnchor.constraint      (equalTo: viewsLabel.bottomAnchor, constant: 5) .isActive = true
         tagsLabel.leftAnchor.constraint     (equalTo: leftAnchor, constant: 16)             .isActive = true
         tagsLabel.rightAnchor.constraint    (equalTo: rightAnchor, constant: -16)           .isActive = true
         
+        //Date Taken Label
         addSubview(takenLabel)
         takenLabel.topAnchor.constraint     (equalTo: tagsLabel.bottomAnchor, constant: 10) .isActive = true
         takenLabel.leftAnchor.constraint    (equalTo: leftAnchor, constant: 16)             .isActive = true
         takenLabel.rightAnchor.constraint   (equalTo: rightAnchor, constant: -16)           .isActive = true
         takenLabel.heightAnchor.constraint  (equalToConstant: 20)                           .isActive = true
         
+        //Date Published Label
         addSubview(publishedLabel)
         publishedLabel.topAnchor.constraint     (equalTo: takenLabel.bottomAnchor)          .isActive = true
         publishedLabel.leftAnchor.constraint    (equalTo: leftAnchor, constant: 16)             .isActive = true
@@ -111,29 +123,10 @@ class FlickrPhotoDataCell: BaseTableCell {
         publishedLabel.heightAnchor.constraint  (equalToConstant: 20)                           .isActive = true
     }
     
-    
     //----------------------------------------------------------------------------------------
     //MARK:
-    //MARK: Method to create String with Bold Initial string
+    //MARK: Prepare for Reuse
     //----------------------------------------------------------------------------------------
-    func createLabel(withAddedBoldString boldString: String, toString string: String, withFontSize fontSize: CGFloat) -> UILabel {
-        
-        let boldAttribute = [NSFontAttributeName: UIFont.boldSystemFont(ofSize: fontSize)]
-        let attributedString = NSMutableAttributedString(string: "\(boldString) \(string)")
-        let range = NSRange(location: 0, length: boldString.characters.count)
-        attributedString.addAttributes(boldAttribute, range: range)
-        
-        let label: UILabel = UILabel(frame: CGRect.zero)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: fontSize)
-        label.numberOfLines = 0
-        label.textColor = UIColor.darkGray()
-        label.lineBreakMode = .byWordWrapping
-        label.attributedText = attributedString
-        
-        return label
-    }
-    
     override func prepareForReuse() {
         viewsLabel.attributedText = nil
         tagsLabel.attributedText = nil

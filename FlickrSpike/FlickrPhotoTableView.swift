@@ -8,6 +8,15 @@
 
 import UIKit
 
+
+/*
+ 
+    Main Table view that displays Photos inside the Split View
+ 
+ */
+
+
+
 public class FlickrPhotoTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
     
 
@@ -129,7 +138,8 @@ public class FlickrPhotoTableView: UITableView, UITableViewDataSource, UITableVi
     //----------------------------------------------------------------------------------------
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if indexPath.row == 0 {
+        
+        if indexPath.row == 0 {     // Photo Cell
             let cell = dequeueReusableCell(withIdentifier: Constants.CellIds.PhotoCell) as! FlickrPhotoTableViewCell
             cell.tableView = self
             cell.indexPath = indexPath
@@ -138,7 +148,7 @@ public class FlickrPhotoTableView: UITableView, UITableViewDataSource, UITableVi
             
             return cell
             
-        } else {
+        } else {    //Data Cell
             let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellIds.DataCell) as! FlickrPhotoDataCell
             cell.flickrPhoto = flickrPhotos![indexPath.section]
             
@@ -163,6 +173,10 @@ public class FlickrPhotoTableView: UITableView, UITableViewDataSource, UITableVi
     //MARK:
     //MARK: Custom Methods
     //----------------------------------------------------------------------------------------
+    
+    /*
+        Method to be passed on to the Split View Delegate, to show Image Options ActionSheet
+     */
     func showImagesOptions(forFlickrPhoto flickrPhoto: FlickrPhoto, atIndexPath indexPath: IndexPath) {
         
         if let PhotoCell = cellForRow(at: indexPath) as? FlickrPhotoTableViewCell {
@@ -173,10 +187,16 @@ public class FlickrPhotoTableView: UITableView, UITableViewDataSource, UITableVi
         }
     }
     
+    /*
+        Method to be passed on to the Split View Delegate with user information to show user photos
+     */
     func showUserPhotos(forUser user: String, withUsername username: String) {
         splitView.showUserPhotos(forUser: user, withUsername: username)
     }
     
+    /*
+        Method to be passed on to the Split View Delegate to reload all data
+     */
     func reload() {
         refresher.endRefreshing()
         splitView.reset()

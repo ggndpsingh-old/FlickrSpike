@@ -9,6 +9,13 @@
 import UIKit
 
 
+/*
+    
+    Header View for the main Table View inside Split View
+    Displays username and an options button
+ 
+ */
+
 class FlickrPhotoTableHeaderView: BaseView {
     
     //----------------------------------------------------------------------------------------

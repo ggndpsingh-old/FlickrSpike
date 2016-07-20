@@ -135,7 +135,7 @@ class GalleryViewController: UIViewController, MFMailComposeViewControllerDelega
     }()
     
     lazy var filterButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage(named: "icon-filter"), style: .plain, target: self, action: #selector(toggleSortWindow))
+        let button = UIBarButtonItem(image: Images.FilterIcon, style: .plain, target: self, action: #selector(toggleSortWindow))
         return button
     }()
     
@@ -162,13 +162,13 @@ class GalleryViewController: UIViewController, MFMailComposeViewControllerDelega
         label.textAlignment = .center
         label.textColor = .lightGray()
         label.font = UIFont.boldSystemFont(ofSize: 12)
-        label.text = "Sort Photos"
+        label.text = Strings.SortPhotos
         return label
     }()
     
     lazy var dateTakenButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Date Taken", for: [])
+        button.setTitle(Strings.DateTaken, for: [])
         button.setTitleColor(.white(), for: [])
         button.setTitleColor(.menuBarTint() , for: .disabled)
         button.backgroundColor = .navBar()
@@ -180,7 +180,7 @@ class GalleryViewController: UIViewController, MFMailComposeViewControllerDelega
     
     lazy var datePublishedButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Date Published", for: [])
+        button.setTitle(Strings.DatePublished, for: [])
         button.setTitleColor(.white(), for: [])
         button.setTitleColor(.menuBarTint(), for: .disabled)
         button.backgroundColor = .navBar()
@@ -239,7 +239,7 @@ class GalleryViewController: UIViewController, MFMailComposeViewControllerDelega
         navigationItem.leftBarButtonItem = filterButton
         
         navigationItem.titleView = searchBar
-        navigationItem.title = "Feed"
+        navigationItem.title = Strings.Feed
     }
     
     func toggleSortWindow() {
@@ -562,7 +562,7 @@ extension GalleryViewController: FlickrPhotoSplitViewDelegate, FlickrPhotoSplitV
         
         
         //Cancel Action
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: Strings.Cancel, style: .cancel, handler: nil)
         
         
         //Add Actions

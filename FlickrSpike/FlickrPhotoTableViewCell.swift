@@ -8,6 +8,15 @@
 
 import UIKit
 
+
+/*
+ 
+    Table View cell that contains the Photo
+ 
+ 
+ */
+
+
 class FlickrPhotoTableViewCell: BaseTableCell {
     
     

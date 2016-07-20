@@ -8,6 +8,14 @@
 
 import UIKit
 
+
+/*
+ 
+    Container cell for Split View that contains Collection View
+ 
+ */
+
+
 class FlickrPhotoCollectionContainerCell: BaseCollectionCell {
     
     

@@ -129,7 +129,7 @@ class GalleryViewModel {
         if let result = String(data: data, encoding: String.Encoding.utf8) {
             
             //Convert JSON String to NSDictionary
-            if let list = self.convertJsonStringToDictionary(string: result) {
+            if let list = convertJsonStringToDictionary(string: result) {
                 
                 //Extract Photos Dictionary
                 if let photosList = list["photos"] as? NSDictionary {
@@ -176,24 +176,5 @@ class GalleryViewModel {
             self.delegate?.fetchFailed(withError: Error.FailedToLaodPhotos.rawValue)
             self.delegate?.hideProcessing()
         }
-    }
-    
-    
-    
-    //----------------------------------------------------------------------------------------
-    //MARK:
-    //MARK: Convert JSON String to Dictionary
-    //----------------------------------------------------------------------------------------
-    func convertJsonStringToDictionary(string: String) -> [String:AnyObject]? {
-        
-        if let data = string.data(using: String.Encoding.utf8) {
-            
-            do {
-                return try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String:AnyObject]
-            } catch let error as NSError {
-                print(error.description)
-            }
-        }
-        return nil
     }
 }

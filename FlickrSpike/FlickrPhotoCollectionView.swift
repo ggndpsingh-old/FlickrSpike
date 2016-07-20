@@ -8,6 +8,12 @@
 
 import UIKit
 
+/*
+ 
+ Main Table view that displays Photos inside the Split View
+ 
+ */
+
 public protocol FlickrPhotoCollectionDataSource: class {
     
     func flickrPhotoCollectionView(_ flickrPhotoTableView: FlickrPhotoCollectionView, fetchMoreflickrPhotos skip: Int)
@@ -142,10 +148,9 @@ public class FlickrPhotoCollectionView: UICollectionView, UICollectionViewDelega
     
     
     
-    //----------------------------------------------------------------------------------------
-    //MARK:
-    //MARK: Custom Methods
-    //----------------------------------------------------------------------------------------
+    /*
+        Method to be passed on to the Split View Delegate to reload all data
+     */
     func reload() {
         refresher.endRefreshing()
         splitView.reset()

@@ -15,6 +15,13 @@ import Foundation
 //--------------------------------------------------------------------------------
 struct Strings {
     
+    static let Feed                     = NSLocalizedString("Feed",                     comment: "Title for the Feed View Controller")
+    static let SortPhotos               = NSLocalizedString("Sort Photos",              comment: "Title for window that shows options to sort photos.")
+    
+    static let DateTaken                = NSLocalizedString("Date Taken",               comment: "Title for sort by date taken button")
+    
+    static let DatePublished            = NSLocalizedString("Date Published",           comment: "Title for sort by date published button")
+    
     static let SearchTags               = NSLocalizedString("Search Tags",              comment: "Placeholder for search bar input")
     
     static let PhotoOptions             = NSLocalizedString("Photo Options",            comment: "Title for Photo Options actionsheet")
@@ -24,6 +31,8 @@ struct Strings {
     static let OpenInSafari             = NSLocalizedString("Open in Safari",           comment: "Title for Open Photo in Safari button")
     
     static let ShareByEmail             = NSLocalizedString("Share by Email",           comment: "Title for  Share Photo by Email button")
+    
+    static let Cancel                   = NSLocalizedString("Cancel",                   comment: "Title for cancel button")
     
     static let Views                    = NSLocalizedString("Views",                    comment: "To tell the user, how many views a photo has reveived")
     

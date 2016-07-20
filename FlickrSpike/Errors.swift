@@ -1,8 +1,8 @@
 //
 //  Errors.swift
-//  Splity
+//  FlickrSpike
 //
-//  Created by Gagandeep Singh on 8/7/16.
+//  Created by Gagandeep Singh on 19/7/16.
 //  Copyright © 2016 Gagandeep Singh. All rights reserved.
 //
 
