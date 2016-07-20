@@ -159,7 +159,6 @@
 		CE09CDEE1D3B72AE00B04E5B /* FlickrSpike */ = {
 			isa = PBXGroup;
 			children = (
-				CE0FF2941D3E3AA000962FB5 /* Reachability.swift */,
 				CEC198A91D3CA2C500BF7F5F /* Asset */,
 				CEC198A81D3CA2B300BF7F5F /* Helper */,
 				CE0FF2981D3E4FD100962FB5 /* Service */,
@@ -192,6 +191,7 @@
 		CE0FF2981D3E4FD100962FB5 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				CE0FF2941D3E3AA000962FB5 /* Reachability.swift */,
 				CE8F190F1D3E6E430075FADC /* FlickrService.swift */,
 				CE0FF2961D3E4E8B00962FB5 /* ImageLoaderWithCache.swift */,
 			);

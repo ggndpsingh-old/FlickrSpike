@@ -15,7 +15,7 @@ import Foundation
 //--------------------------------------------------------------------------------
 struct Strings {
     
-    static let SearchTags               = NSLocalizedString("Searcg Tags",              comment: "Placeholder for search bar input")
+    static let SearchTags               = NSLocalizedString("Search Tags",              comment: "Placeholder for search bar input")
     
     static let PhotoOptions             = NSLocalizedString("Photo Options",            comment: "Title for Photo Options actionsheet")
     
@@ -47,11 +47,11 @@ struct Strings {
     
     
     
-    static func ShowingAllPhotos(withCount count: Int, forTags tags: String) -> String {
-        return String(format: NSLocalizedString("Showing all %i Photos for %@", comment: "Gallery detail for photos being shown for performed search e.g Showing all photos for cats"), count, tags)
+    static func ShowingPhotos(withCount count: Int, forTags tags: String) -> String {
+        return String(format: NSLocalizedString("Showing %i Photos for %@", comment: "Gallery detail for photos being shown for performed search e.g Showing all photos for cats"), count, tags)
     }
     
-    static func ShowingAllRecentPhotos(withCount count: Int) -> String {
+    static func ShowingRecentPhotos(withCount count: Int) -> String {
         return String(format: NSLocalizedString("Showing %i Recent Photos", comment: "Gallery detail for recent photos being shown"), count)
     }
     

@@ -29,15 +29,21 @@ class GalleryViewController: UIViewController, MFMailComposeViewControllerDelega
                 }
                 
                 if isSearching {
-                    detailsLabel.text = Strings.ShowingAllPhotos(withCount: count, forTags: searchString)
+                    detailsLabel.text = Strings.ShowingPhotos(withCount: count, forTags: searchString)
                     
                 } else {
-                    detailsLabel.text = Strings.ShowingAllRecentPhotos(withCount: count)
+                    detailsLabel.text = Strings.ShowingRecentPhotos(withCount: count)
                 }
             }
         }
     }
     
+    
+    var sort: FlickrAPI.Sort = .DatePublished {
+        didSet {
+            resetflickrPhotos(in: flickrPhotoSplitView)
+        }
+    }
     
     
     //----------------------------------------------------------------------------------------
@@ -55,6 +61,14 @@ class GalleryViewController: UIViewController, MFMailComposeViewControllerDelega
     //MARK:- Search Helpers
     var isSearching = false
     var searchString = ""
+    
+    var sortWindowStatus: SortWindowStatus = .closed
+    enum SortWindowStatus {
+        case open
+        case closed
+    }
+    
+    var sortWindowBottomAnchor: NSLayoutConstraint!
     
     //MARK:- Split View to show Table View & Collection View
     lazy var flickrPhotoSplitView: FlickrPhotoSplitView = {
@@ -98,11 +112,19 @@ class GalleryViewController: UIViewController, MFMailComposeViewControllerDelega
     }()
     
     //MARK:- Tap to dismiss keyboard
-    lazy var tap: UITapGestureRecognizer = {
+    lazy var tapToDismissKeyboard: UITapGestureRecognizer = {
         let tap = UITapGestureRecognizer()
         tap.addTarget(self, action: #selector(dismissKeyboard))
         return tap
     }()
+    
+    
+    lazy var tapToCloseSortWindow: UITapGestureRecognizer = {
+        let tap = UITapGestureRecognizer()
+        tap.addTarget(self, action: #selector(closeSortWindow))
+        return tap
+    }()
+    
     
     //MARK:- Spinner
     let spinner: UIActivityIndicatorView = {
@@ -110,6 +132,78 @@ class GalleryViewController: UIViewController, MFMailComposeViewControllerDelega
         av.translatesAutoresizingMaskIntoConstraints = false
         av.hidesWhenStopped = true
         return av
+    }()
+    
+    lazy var filterButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(image: UIImage(named: "icon-filter"), style: .plain, target: self, action: #selector(toggleSortWindow))
+        return button
+    }()
+    
+    let sortWindow: UIView = {
+        let view = UIView(frame: CGRect.zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .navBar()
+        return view
+    }()
+    
+    let sortStack: UIStackView = {
+        let view = UIStackView(frame: CGRect.zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .navBar()
+        view.alignment = .fill
+        view.axis = .horizontal
+        return view
+    }()
+    
+    let sortWindowTitle: UILabel = {
+        let label = UILabel(frame: CGRect.zero)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.backgroundColor = .navBar()
+        label.textAlignment = .center
+        label.textColor = .lightGray()
+        label.font = UIFont.boldSystemFont(ofSize: 12)
+        label.text = "Sort Photos"
+        return label
+    }()
+    
+    lazy var dateTakenButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Date Taken", for: [])
+        button.setTitleColor(.white(), for: [])
+        button.setTitleColor(.menuBarTint() , for: .disabled)
+        button.backgroundColor = .navBar()
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        button.addTarget(self, action: #selector(switchSortBy(sender:)), for: .touchUpInside)
+        return button
+    }()
+    
+    
+    lazy var datePublishedButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Date Published", for: [])
+        button.setTitleColor(.white(), for: [])
+        button.setTitleColor(.menuBarTint(), for: .disabled)
+        button.backgroundColor = .navBar()
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        button.addTarget(self, action: #selector(switchSortBy(sender:)), for: .touchUpInside)
+        return button
+    }()
+    
+    let sortWindowPadding: UIView = {
+        let view = UIView(frame: CGRect.zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .navBar()
+        return view
+    }()
+    
+    
+    
+    let overlay: UIView = {
+        let view = UIView(frame: CGRect.zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .black()
+        view.alpha = 0
+        return view
     }()
     
     
@@ -129,12 +223,8 @@ class GalleryViewController: UIViewController, MFMailComposeViewControllerDelega
         
         setupNavigationBar()
         setupViews()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         
-        fetchRecentPhotosFromFlickr()
+        switchSortBy(sender: datePublishedButton)
     }
     
     
@@ -145,9 +235,68 @@ class GalleryViewController: UIViewController, MFMailComposeViewControllerDelega
     func setupNavigationBar() {
         navigationController?.navigationBar.isTranslucent = false
         navigationController?.navigationBar.barTintColor = .navBar()
-        navigationController?.hidesBarsOnSwipe = true
+        navigationController?.navigationBar.tintColor = .white()
+        navigationItem.leftBarButtonItem = filterButton
+        
         navigationItem.titleView = searchBar
         navigationItem.title = "Feed"
+    }
+    
+    func toggleSortWindow() {
+        
+        switch sortWindowStatus {
+        case .open:
+            closeSortWindow()
+            
+        default:
+            openSortWindow()
+        }
+    }
+    
+    func openSortWindow() {
+        
+        sortWindowStatus = .open
+        searchBar.isUserInteractionEnabled = false
+        overlay.addGestureRecognizer(tapToCloseSortWindow)
+        
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+            self.overlay.alpha = 0.5
+            self.sortWindowBottomAnchor.constant = 60
+            self.view.layoutIfNeeded()
+            }, completion: nil)
+    }
+    
+    func closeSortWindow() {
+        
+        sortWindowStatus = .closed
+        searchBar.isUserInteractionEnabled = true
+        overlay.removeGestureRecognizer(tapToCloseSortWindow)
+        
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+            self.overlay.alpha = 0
+            self.sortWindowBottomAnchor.constant = 0
+            self.view.layoutIfNeeded()
+            }, completion: nil)
+    }
+    
+    func switchSortBy(sender: UIButton) {
+        
+        closeSortWindow()
+        
+        switch sender {
+            
+        case dateTakenButton:
+            sort = .DateTaken
+            datePublishedButton.isEnabled = true
+            dateTakenButton.isEnabled = false
+            
+            
+        default:
+            sort = .DatePublished
+            datePublishedButton.isEnabled = false
+            dateTakenButton.isEnabled = true
+        }
+        
     }
     
     func setupViews() {
@@ -161,10 +310,10 @@ class GalleryViewController: UIViewController, MFMailComposeViewControllerDelega
         
         //spinner
         view.addSubview(spinner)
-        spinner.widthAnchor.constraint(equalToConstant: 20).isActive = true
-        spinner.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        spinner.centerXAnchor.constraint(equalTo: detailsLabel.centerXAnchor).isActive = true
-        spinner.centerYAnchor.constraint(equalTo: detailsLabel.centerYAnchor).isActive = true
+        spinner.widthAnchor.constraint      (equalToConstant: 20)               .isActive = true
+        spinner.heightAnchor.constraint     (equalToConstant: 20)               .isActive = true
+        spinner.centerXAnchor.constraint    (equalTo: detailsLabel.centerXAnchor).isActive = true
+        spinner.centerYAnchor.constraint    (equalTo: detailsLabel.centerYAnchor).isActive = true
         
         //Split View
         view.addSubview(flickrPhotoSplitView)
@@ -172,6 +321,45 @@ class GalleryViewController: UIViewController, MFMailComposeViewControllerDelega
         flickrPhotoSplitView.rightAnchor.constraint    (equalTo: view.rightAnchor) .isActive = true
         flickrPhotoSplitView.topAnchor.constraint      (equalTo: detailsLabel.bottomAnchor)   .isActive = true
         flickrPhotoSplitView.bottomAnchor.constraint   (equalTo: view.bottomAnchor).isActive = true
+        
+        //Overlay
+        view.addSubview(overlay)
+        overlay.leftAnchor.constraint   (equalTo: view.leftAnchor)  .isActive = true
+        overlay.rightAnchor.constraint  (equalTo: view.rightAnchor) .isActive = true
+        overlay.topAnchor.constraint    (equalTo: view.topAnchor)   .isActive = true
+        overlay.bottomAnchor.constraint (equalTo: view.bottomAnchor).isActive = true
+        
+        //Sort Window
+        view.addSubview(sortWindow)
+        sortWindow.leftAnchor.constraint    (equalTo: view.leftAnchor)  .isActive = true
+        sortWindow.rightAnchor.constraint   (equalTo: view.rightAnchor) .isActive = true
+        sortWindowBottomAnchor = sortWindow.bottomAnchor.constraint(equalTo: view.topAnchor)
+        sortWindowBottomAnchor.isActive = true
+        
+        //Sort Window Title
+        sortWindow.addSubview(sortWindowTitle)
+        sortWindowTitle.leftAnchor.constraint   (equalTo: sortWindow.leftAnchor)  .isActive = true
+        sortWindowTitle.rightAnchor.constraint  (equalTo: sortWindow.rightAnchor) .isActive = true
+        sortWindowTitle.topAnchor.constraint    (equalTo: sortWindow.topAnchor).isActive = true
+        sortWindowTitle.heightAnchor.constraint (equalToConstant: 20).isActive = true
+        
+        //Sort Stack
+        sortWindow.addSubview(sortStack)
+        sortStack.leftAnchor.constraint    (equalTo: sortWindow.leftAnchor)  .isActive = true
+        sortStack.rightAnchor.constraint   (equalTo: sortWindow.rightAnchor) .isActive = true
+        sortStack.topAnchor.constraint      (equalTo: sortWindowTitle.bottomAnchor).isActive = true
+        sortStack.bottomAnchor.constraint   (equalTo: sortWindow.bottomAnchor) .isActive = true
+        
+        //Sort by Date Published Button
+        sortStack.addArrangedSubview(datePublishedButton)
+        datePublishedButton.widthAnchor.constraint(equalToConstant: MainScreen.Size.width / 2).isActive = true
+        datePublishedButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        //Sort by Date Taken Button
+        sortStack.addArrangedSubview(dateTakenButton)
+        dateTakenButton.widthAnchor.constraint(equalToConstant: MainScreen.Size.width / 2).isActive = true
+        dateTakenButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
     }
     
     
@@ -193,7 +381,7 @@ extension GalleryViewController: GalleryViewModelDelegate {
         
         if Reachability.isConnectedToNetwork() {
             
-            viewModel.fetchRecentImagesFromFlickr(atPage: pagesLoaded, sortedBy: FlickrAPI.Sort.DateTaken)
+            viewModel.fetchRecentImagesFromFlickr(atPage: pagesLoaded, sortedBy: sort)
             pagesLoaded += 1
             
         } else {
@@ -208,7 +396,7 @@ extension GalleryViewController: GalleryViewModelDelegate {
         
         if Reachability.isConnectedToNetwork() {
             
-            viewModel.searchflickrForTags(inString: searchString, onPage: pagesLoaded, sortedBy: FlickrAPI.Sort.DateTaken)
+            viewModel.searchflickrForTags(inString: searchString, onPage: pagesLoaded, sortedBy: sort)
             pagesLoaded += 1
             
         } else {
@@ -491,12 +679,12 @@ extension GalleryViewController: UISearchBarDelegate {
     //Add Tap to dismiss keyboard
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchBar.setShowsCancelButton(true, animated: true)
-        view.addGestureRecognizer(tap)
+        view.addGestureRecognizer(tapToDismissKeyboard)
     }
     
     //Remove Tap to dismiss keyboard from view
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        view.removeGestureRecognizer(tap)
+        view.removeGestureRecognizer(tapToDismissKeyboard)
     }
     
     //Handle search cancel

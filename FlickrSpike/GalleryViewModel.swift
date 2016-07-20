@@ -49,6 +49,7 @@ class GalleryViewModel {
         
         //Construct fetch Url
         let urlString = "\(FlickrAPI.RecentBaseUrl)&per_page=\(FlickrAPI.ImagesPerPage)&page=\(page)&\(FlickrAPI.Arguments)&safe_search=\(FlickrAPI.SafeSearch.rawValue)&sort=\(sort.rawValue)"
+        print(sort.rawValue)
         
         //Create URL
         let url = URL(string: urlString)!
