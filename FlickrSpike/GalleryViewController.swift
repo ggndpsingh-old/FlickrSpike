@@ -51,14 +51,14 @@ class GalleryViewController: UIViewController, MFMailComposeViewControllerDelega
     //MARK: Variables
     //----------------------------------------------------------------------------------------
     
-    //MARK:- View Model for API Methods
+    //View Model for API Methods
     var viewModel: GalleryViewModel!
     
-    //MARK:- Track number of plages loaded
+    //Track number of plages loaded
     var pagesLoaded = 0
     
     
-    //MARK:- Search Helpers
+    //Search Helpers
     var isSearching = false
     var searchString = ""
     
@@ -70,7 +70,7 @@ class GalleryViewController: UIViewController, MFMailComposeViewControllerDelega
     
     var sortWindowBottomAnchor: NSLayoutConstraint!
     
-    //MARK:- Split View to show Table View & Collection View
+    //Split View to show Table View & Collection View
     lazy var flickrPhotoSplitView: FlickrPhotoSplitView = {
         let sv = FlickrPhotoSplitView(frame: CGRect.zero)
         sv.translatesAutoresizingMaskIntoConstraints = false
@@ -86,7 +86,7 @@ class GalleryViewController: UIViewController, MFMailComposeViewControllerDelega
         return sv
     }()
     
-    //MARK:- Details Label
+    //Details Label
     let detailsLabel: UILabel = {
         let label = UILabel(frame: CGRect.zero)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -98,7 +98,7 @@ class GalleryViewController: UIViewController, MFMailComposeViewControllerDelega
         return label
     }()
     
-    //MARK:- Search Bar
+    //Search Bar
     lazy var searchBar: UISearchBar = {
         let bar = UISearchBar(frame: CGRect.zero)
         bar.delegate = self
@@ -111,7 +111,7 @@ class GalleryViewController: UIViewController, MFMailComposeViewControllerDelega
         return bar
     }()
     
-    //MARK:- Tap to dismiss keyboard
+    //Gestire Recognizers
     lazy var tapToDismissKeyboard: UITapGestureRecognizer = {
         let tap = UITapGestureRecognizer()
         tap.addTarget(self, action: #selector(dismissKeyboard))
@@ -126,7 +126,7 @@ class GalleryViewController: UIViewController, MFMailComposeViewControllerDelega
     }()
     
     
-    //MARK:- Spinner
+    //Spinner
     let spinner: UIActivityIndicatorView = {
         let av = UIActivityIndicatorView(activityIndicatorStyle: .white)
         av.translatesAutoresizingMaskIntoConstraints = false
@@ -134,6 +134,7 @@ class GalleryViewController: UIViewController, MFMailComposeViewControllerDelega
         return av
     }()
     
+    //Sort Window
     lazy var filterButton: UIBarButtonItem = {
         let button = UIBarButtonItem(image: Images.FilterIcon, style: .plain, target: self, action: #selector(toggleSortWindow))
         return button
@@ -189,15 +190,6 @@ class GalleryViewController: UIViewController, MFMailComposeViewControllerDelega
         return button
     }()
     
-    let sortWindowPadding: UIView = {
-        let view = UIView(frame: CGRect.zero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .navBar()
-        return view
-    }()
-    
-    
-    
     let overlay: UIView = {
         let view = UIView(frame: CGRect.zero)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -217,13 +209,18 @@ class GalleryViewController: UIViewController, MFMailComposeViewControllerDelega
         
         //Initialize View Model
         viewModel = GalleryViewModel(delegate: self)
+     
         
+        //Setup View Controller
+        setupNavigationBar()
+        setupViews()
         automaticallyAdjustsScrollViewInsets = false
         edgesForExtendedLayout = []
         
-        setupNavigationBar()
-        setupViews()
         
+        /*
+            This performs the intial fetch for photos and also sets the sort buttons
+         */
         switchSortBy(sender: datePublishedButton)
     }
     
@@ -522,7 +519,7 @@ extension GalleryViewController: FlickrPhotoSplitViewDelegate, FlickrPhotoSplitV
         
         //Get Rect for Header of selected photo
         let rectForHeader = tableView.rectForHeader(inSection: indexPath.section)
-        
+
         //Get Rect for Header in current view
         let rectInView = tableView.convert(rectForHeader, to: self.view)
         
