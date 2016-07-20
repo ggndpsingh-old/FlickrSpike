@@ -56,7 +56,7 @@ class FlickrPhotoTableHeaderView: BaseView {
     lazy var optionsButton: UIButton = {
         let button = UIButton(frame: CGRect.zero)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Images.OptionsButtonImage, for: [])
+        button.setImage(Images.OptionsIcon, for: [])
         button.addTarget(self, action: #selector(showImageOptions), for: .touchUpInside)
         return button
     }()

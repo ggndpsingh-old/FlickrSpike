@@ -31,7 +31,7 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
     //--------------------------------------------------------------------------------
     struct Constants {
         static let CellId = "cellId"
-        static let Icons = [Images.FeedButtonImage, Images.CollectionButtonImage]
+        static let Icons = [Images.FeedIcon, Images.CollectionIcon]
     }
     
     

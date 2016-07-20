@@ -17,7 +17,7 @@ class MenuCell: BaseCollectionCell {
     let imageView: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.image = Images.FeedButtonImage?.withRenderingMode(.alwaysTemplate)
+        iv.image = Images.FeedIcon?.withRenderingMode(.alwaysTemplate)
         iv.tintColor = UIColor.lightGray()
         return iv
     }()
