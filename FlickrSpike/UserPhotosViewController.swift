@@ -122,7 +122,6 @@ extension UserPhotosViewController: UserPhotosViewModelDelegate {
     func fetchRecentPhotosFromFlickr() {
         
         if Reachability.isConnectedToNetwork() {
-            print(user!, pagesLoaded, FlickrAPI.Sort.DateTaken)
             viewModel.fetchRecentImagesFromFlickr(forUser: user!, atPage: pagesLoaded, sortedBy: FlickrAPI.Sort.DateTaken)
             pagesLoaded += 1
             
@@ -133,9 +132,6 @@ extension UserPhotosViewController: UserPhotosViewModelDelegate {
     
     
     
-    //----------------------------------------------------------------------------------------
-    //MARK: Delegate Methods
-    //----------------------------------------------------------------------------------------
     //Show Loading Spinner
     //If fetch or search failes, show an error message
     func fetchFailed(withError error: Int?) {
